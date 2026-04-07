@@ -62,13 +62,15 @@ export default function CheckoutModal({ isOpen, onClose, items, totalAmount, onP
           }),
         });
         const data = await res.json();
-        if (data.shareable_url) {
+        if (res.ok && data.shareable_url) {
           setCheckoutUrl(data.shareable_url);
         } else {
-          setCheckoutUrl('https://checkout.nexflowx.tech/demo');
+          setState('error');
+          setErrorMessage(data.error || t('general.error'));
         }
       } catch {
-        setCheckoutUrl('https://checkout.nexflowx.tech/demo');
+        setState('error');
+        setErrorMessage(t('general.error'));
       }
     };
 

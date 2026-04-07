@@ -8,7 +8,6 @@ import {
   ChevronDown,
   ChevronRight,
   Phone,
-  MessageCircle,
   Search,
   ShoppingCart,
   User,
@@ -497,17 +496,7 @@ export default function Header({ onCartClick, onTrackingClick }: HeaderProps) {
         </div>
       </div>
 
-      {/* WhatsApp Floating Button */}
-      <a
-        href="https://wa.me/34669386327"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="WhatsApp"
-        className="fixed bottom-6 right-6 z-30 flex items-center justify-center w-14 h-14 rounded-full shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl"
-        style={{ backgroundColor: '#25D366' }}
-      >
-        <MessageCircle size={26} className="text-white" fill="white" />
-      </a>
+
     </>
   );
 }
