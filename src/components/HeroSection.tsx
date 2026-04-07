@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { images } from '@/lib/images';
 
 interface Slide {
   title: string;
@@ -78,39 +79,44 @@ export default function HeroSection() {
       aria-roledescription="carousel"
       aria-label="Securfix Products Slider"
     >
-      {/* Dark background with subtle metallic texture pattern */}
-      <div className="absolute inset-0 bg-[#1a1a2e]" />
+      {/* Background image crossfade */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentSlide}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.2, ease: 'easeInOut' }}
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url(${images.hero[currentSlide]})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+      </AnimatePresence>
 
-      {/* Subtle diagonal lines pattern for metallic feel */}
-      <div
-        className="absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            'repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.5) 20px, rgba(255,255,255,0.5) 21px)',
-        }}
-      />
-
-      {/* Gradient overlay — transparent at top, dark at bottom */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70" />
+      {/* Gradient overlay for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70 z-[1]" />
 
       {/* Slide content with fade transition */}
       <AnimatePresence mode="wait">
         <motion.div
-          key={currentSlide}
+          key={`content-${currentSlide}`}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -12 }}
-          transition={{ duration: 0.5, ease: 'easeInOut' }}
+          transition={{ duration: 0.5, ease: 'easeInOut', delay: 0.2 }}
           className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 z-10"
         >
           <h1 className="text-4xl md:text-6xl font-bold tracking-wide text-white mb-4 drop-shadow-lg uppercase">
             {slide.title}
           </h1>
-          <p className="text-lg md:text-xl text-gray-300 max-w-2xl mb-8 drop-shadow-md">
+          <p className="text-lg md:text-xl text-gray-200 max-w-2xl mb-8 drop-shadow-md">
             {slide.subtitle}
           </p>
           <button
-            className="inline-flex items-center gap-2 px-8 py-3 bg-white text-black font-semibold text-sm tracking-wider uppercase rounded-sm hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a2e]"
+            className="inline-flex items-center gap-2 px-8 py-3 bg-white text-black font-semibold text-sm tracking-wider uppercase rounded-sm hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black/40"
           >
             {slide.cta}
           </button>

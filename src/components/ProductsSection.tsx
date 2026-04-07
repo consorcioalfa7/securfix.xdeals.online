@@ -2,7 +2,9 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, ShoppingCart } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
+import Image from 'next/image';
+import { getProductImage } from '@/lib/images';
 
 interface Product {
   name: string;
@@ -57,6 +59,7 @@ function getDiscountPercent(original: number, sale: number): number {
 
 function ProductCard({ product }: { product: Product }) {
   const discount = getDiscountPercent(product.originalPrice, product.salePrice);
+  const productImage = getProductImage(product.name);
 
   return (
     <motion.div
@@ -67,9 +70,16 @@ function ProductCard({ product }: { product: Product }) {
       transition={{ duration: 0.35, ease: 'easeOut' }}
       className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col"
     >
-      {/* Image placeholder */}
-      <div className="relative bg-gray-100 aspect-square flex items-center justify-center">
-        <Package className="w-12 h-12 text-gray-300" />
+      {/* Product image */}
+      <div className="relative aspect-[4/3] bg-gray-100 overflow-hidden">
+        <Image
+          src={productImage}
+          alt={product.name}
+          fill
+          className="object-cover hover:scale-105 transition-transform duration-300"
+          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          unoptimized
+        />
         <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded">
           OFERTA
         </span>

@@ -738,6 +738,66 @@ Apple Pay, Google Pay, Maestro, Mastercard, Shop Pay, Visa
 
 ---
 
+## Task ID: 4-a — Extract All Image URLs from securfix.pt
+
+**Date:** 2026-04-07
+**Status:** ✅ Complete
+
+### Files Created
+
+#### 1. `extracted-images.json`
+- Structured JSON file containing ALL real image URLs from securfix.pt, organized by section
+- **Image counts:**
+  - Hero slider: 5 images (1728x resolution)
+  - Category grid: 12 images (540x resolution)
+  - Featured products: 8 images (450x resolution)
+  - All products: 93 product entries (300x resolution)
+  - Services: 3 images (1080x resolution)
+  - Blog articles: 5 images (540x resolution)
+  - Testimonials: 6 avatar images (100x100 resolution)
+  - Trust badges: 3 certification images
+  - Logo: header, footer, and favicon variants
+
+### Data Sources Used
+1. **web-reader CLI** — Extracted HTML from 12 collection pages:
+   - Homepage, Fencing collection, Doors collection
+   - Panels, Chain link, Fire doors, Security doors, Mesh gates
+   - Utility doors, Sliding doors, Tramex, Accessories
+2. **agent-browser** — Navigated to 15+ pages to extract product image URLs with alt text matching:
+   - `/collections/torcao-simples` — Found Rollo Malla Simple Torsion Verde image
+   - `/collections/porta-de-incendio` — Found all 5 fire door variants + 6 accessories
+   - `/collections/portas-blindadas` — Found all 40+ security door model images
+   - `/collections/portas-de-malha` — Found all mesh gate variants including ondulado
+   - `/collections/porta-de-arrecadacao` — Found all 5 utility/storage door images
+   - `/collections/porta-de-correr-casoneto` — Found all sliding door structure images
+   - `/collections/arame` — Found wire and tensor product images
+   - `/collections/arame-arame` — Found barbed wire images
+   - `/collections/varao-nervurado` — Found corrugated steel bar images
+   - `/collections/malha-soldada` — Found welded mesh product images
+   - `/collections/tramex` — Found tramex grating and step images
+   - `/collections/gado-de-malha` — Found sheep wire image
+   - `/collections/torcao-tripla` — Found hexagonal mesh images
+   - `/collections/chapa-perfurada` — Found perforated sheet images
+   - `/collections/cerca-de-construcao` — Found construction fence images
+
+### URL Format
+- All URLs are absolute, starting with `https://securfix.pt/cdn/shop/...` or `https://cdn.shopify.com/s/files/...`
+- Product images from `/products/` path (Shopify product images)
+- Category/banner images from `/files/` path (uploaded files)
+- Article images from `/articles/` path (blog content)
+- All URLs verified accessible via HTTP HEAD requests (200 OK responses)
+
+### Notes
+- 93 total product entries covers all 84 catalog products plus additional variants
+- All 5 hero slider images extracted at full 1728x resolution
+- All 12 category images extracted from homepage category grid section
+- All 8 featured product images match the ProductCatalog component product names
+- Security doors section has the most variety (40+ distinct product images/models)
+- Some product images use `/files/` path instead of `/products/` path (Shopify behavior)
+- Utility/Storage door images are all from `/files/` path (not product images)
+
+---
+
 ## Task ID: 3-a — ProductCatalog Component
 
 **Date:** 2026-01-06

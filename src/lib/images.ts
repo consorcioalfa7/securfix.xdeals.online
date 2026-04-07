@@ -1,0 +1,208 @@
+// Central image registry - all real images from securfix.pt
+// Extracted from the live website
+
+export const images = {
+  logo: {
+    header: 'https://securfix.pt/cdn/shop/files/logo_securfix_250x@2x.png?v=1613722450',
+    footer: 'https://securfix.pt/cdn/shop/files/DISENO_LOGO_HORIZONTAL.png?v=1613720485',
+  },
+
+  hero: [
+    'https://securfix.pt/cdn/shop/files/puertas-cortafuegos_slider-home_1728x.jpg?v=1664219937',
+    'https://securfix.pt/cdn/shop/files/panel_hercules_piscina_2_1728x.jpg?v=1771414349',
+    'https://securfix.pt/cdn/shop/files/malla_simple_torsion_verde_1728x.jpg?v=1771411156',
+    'https://securfix.pt/cdn/shop/files/malla-electrosoldada_slider-home_1728x.jpg?v=1664219899',
+    'https://securfix.pt/cdn/shop/files/PUERTAACORAZADA_SECURFIX_2dac8388-002a-4632-aa03-a8a5ef63ba46_1728x.jpg?v=1623079472',
+  ],
+
+  categories: {
+    'Painel de Vedação': 'https://securfix.pt/cdn/shop/files/malla-hercules_af4f9ac1-5ae9-4845-bb72-5f40bf2338b9_540x.jpg?v=1716274723',
+    'Rede Malha Solta': 'https://securfix.pt/cdn/shop/files/malla-simple-torsion-plastificada-verde-5_540x.jpg?v=1732195574',
+    'Grades e Corrimãos': 'https://securfix.pt/cdn/shop/files/valla-de-hierro-macizo-cuadrado_540x.jpg?v=1733743265',
+    'Rede Hexagonal': 'https://securfix.pt/cdn/shop/files/malla-triple-torsion_slider-home_540x.jpg?v=1664219900',
+    'Portões de Rede': 'https://securfix.pt/cdn/shop/files/puerta-mallazo-securfix-premium-entrada-perro_540x.jpg?v=1674132981',
+    'Rede Eletrossoldada': 'https://securfix.pt/cdn/shop/files/aplicaciones-rollo-malla-electrosoldada_540x.jpg?v=1685619819',
+    'Portas de Segurança': 'https://securfix.pt/cdn/shop/files/cambiar-puerta-entrada-casa-moderna-blanca_540x.jpg?v=1738671926',
+    'Portas Corta-Fogo': 'https://securfix.pt/cdn/shop/files/puerta-cortafuegos-doble_540x.jpg?v=1685624517',
+    'Portas de Serviço': 'https://securfix.pt/cdn/shop/files/puerta-trastero-banner_540x.jpg?v=1708413288',
+    'Portas de Correr': 'https://securfix.pt/cdn/shop/files/puerta-corredera-empotrada-casoneto-orchidea-plus_540x.jpg?v=1693578986',
+    'Gradil Tramex': 'https://securfix.pt/cdn/shop/files/tipos-de-tramex-8_540x.jpg?v=1716670059',
+    'Chapa Perfurada': 'https://securfix.pt/cdn/shop/files/barandilla-chapa-perforada-6_540x.jpg?v=1719311219',
+  },
+
+  featuredProducts: {
+    'Painel de Vedação Cinza': 'https://securfix.pt/cdn/shop/products/panel-malla-hercules-gris-antracita_46bc6484-e3a2-4ffd-b2ed-032f729e9134_450x.jpg?v=1644932080',
+    'Rede Eletrossoldada Galvanizada': 'https://securfix.pt/cdn/shop/products/malla-electrosoldada-galvanizada-2-60-x-1-00-m-100-50-4-mm-mallas_944_550x_5fb66a90-871f-4013-a692-aaa9a4979c8e_450x.jpg?v=1640090185',
+    'Grade de Ferro Maciço Quadrado 1,00 x 2,25 m': 'https://securfix.pt/cdn/shop/products/reja-macizo-cuadrado-de-0-90-x-2-50-m_682_450x.jpg?v=1590761487',
+    'Gradil Tramex': 'https://securfix.pt/cdn/shop/products/rejilla-tramex-detalles-pletina-varillas_450x.jpg?v=1676385182',
+    'Portão de Vedação Cinza Premium': 'https://securfix.pt/cdn/shop/products/puerta-mallazo-gris-aldaba-premium-100_450x.jpg?v=1674732152',
+    'Porta Corta-Fogo P60 (EI 60) C5 1 Folha': 'https://securfix.pt/cdn/shop/products/puerta-cortafuego-standard-G6_1hoja_450x.jpg?v=1658356479',
+    'Porta de Segurança Grau 3 Cearco Standard 3 pontos': 'https://securfix.pt/cdn/shop/files/PUERTA_ACORAZADA_CEARCO_CLASICA-BLANCA_B4_3PTS_450x.jpg?v=1685531439',
+    'Estrutura Porta de Correr Orchidea Basic': 'https://securfix.pt/cdn/shop/products/OrchideaBasic_Estrutura_450x.jpg?v=1661896714',
+    'Porta de Segurança Triana B4 Grau 3 3 Pontos': 'https://securfix.pt/cdn/shop/files/PUERTA-ACORAZADA-TRIANA-B4-CASTANO-RUSTICO_450x.jpg?v=1690196241',
+    'Porta Corta-Fogo P90 (EI 90) C5 1 Folha': 'https://securfix.pt/cdn/shop/products/puerta-cortafuego-standard-G6_1hoja_300x.png?v=1658356505',
+    'Porta Corta-Fogo P120 (EI 120) C5 1 Folha': 'https://securfix.pt/cdn/shop/files/puerta-cortafuego-rf120_300x.jpg?v=1685371334',
+    'Porta Multiuso Branca': 'https://securfix.pt/cdn/shop/files/puerta_multiusos_ral9010---derecha_amarilla_300x.jpg?v=1707836841',
+    'Poste Malha Hercules Verde': 'https://securfix.pt/cdn/shop/products/poste-cremallera-quickfix-verde-1-30-m-para-malla-de-00-postes_264_300x.jpg?v=1590761356',
+    'Rolo de Arame Farpado Verde': 'https://securfix.pt/cdn/shop/products/rollo-alambre-espino-verde-mallas_691_00b85586-48ec-4114-b310-3121e0430e5a_300x.jpg?v=1623158957',
+    'Rolo de Rede Ovelheira com Nó': 'https://securfix.pt/cdn/shop/products/rollo-malla-anudada-cinegetica_5d5d2c2a-e92c-4310-8493-e0d325f32342_300x.jpg?v=1655152761',
+  },
+
+  // Complete product image map for catalog
+  allProducts: {
+    'Painel Malla Hercules Verde': 'https://securfix.pt/cdn/shop/products/panel-malla-hercules-verde_940296be-31ee-42e4-a5cf-ca8ee94461ab_300x.jpg?v=1640265446',
+    'Painel Malla Hercules Branca': 'https://securfix.pt/cdn/shop/products/panel-malla-hercules-blanca_3a2a2904-e5bd-439a-852b-77eb17bf32fb_300x.jpg?v=1659987926',
+    'Painel Malla Hercules Gris Antracita': 'https://securfix.pt/cdn/shop/products/panel-malla-hercules-gris-antracita_46bc6484-e3a2-4ffd-b2ed-032f729e9134_300x.jpg?v=1644932080',
+    'Painel Malla Hercules Galvanizada': 'https://securfix.pt/cdn/shop/products/panel-malla-hercules-galvanizada_959393f6-9105-46ff-888d-3d8f0f3a8dc5_300x.jpg?v=1644932018',
+    'Cerca Hercules Verde Basico (2m)': 'https://securfix.pt/cdn/shop/products/panel-malla-hercules-verde-2m_300x.jpg?v=1659111504',
+    'Cerca Hercules Branco Basico (2m)': 'https://securfix.pt/cdn/shop/products/panel-malla-hercules-blanca-2m_300x.jpg?v=1659991286',
+    'Cerca Hercules Cinza Basico (2m)': 'https://securfix.pt/cdn/shop/products/panel-malla-hercules-gris-antracita-2m_300x.jpg?v=1659112004',
+    'Rolo Rede Malha Solta Galvanizada': 'https://securfix.pt/cdn/shop/products/rollo-malla-simple-torsion-galvanizada-1-00-x-15-m-mallas_145_300x.jpg?v=1593495239',
+    'Rolo Rede Malha Solta Verde': 'https://securfix.pt/cdn/shop/files/rollo-malla-simple-torsion-verde-plastificada_4d4ff02e-ede8-40ed-a965-ad7fd1af78a4_300x.jpg?v=1695114682',
+    'Rolo Rede Malha Tripla Torção Galinheiro': 'https://securfix.pt/cdn/shop/products/rollo-malla-triple-torsion-para-gallinero-1-00-x-10-m-19-mallas_529_300x.jpg?v=1590761605',
+    'Rolo de Rede Ovelheira com Nó': 'https://securfix.pt/cdn/shop/products/rollo-malla-anudada-cinegetica_5d5d2c2a-e92c-4310-8493-e0d325f32342_300x.jpg?v=1655152761',
+    'Painel Rede Eletrossoldada Galvanizada': 'https://securfix.pt/cdn/shop/products/malla-electrosoldada-galvanizada-2-60-x-1-00-m-100-50-4-mm-mallas_944_550x_5fb66a90-871f-4013-a692-aaa9a4979c8e_300x.jpg?v=1640090185',
+    'Rolo Rede Eletrossoldada Galvanizada': 'https://securfix.pt/cdn/shop/products/rollo-malla-electrosoldada-galvanizada-1-00-x-25-m-51-2-mm-mallas_144_300x.jpg?v=1590761550',
+    'Grade Varilla Redonda 0.90 x 2.50 m': 'https://securfix.pt/cdn/shop/products/reja-varilla-redonda-0-90-x-2-50-m_913_300x.jpg?v=1590761527',
+    'Grade Maciço Quadrado 0.90 x 2.50 m': 'https://securfix.pt/cdn/shop/products/reja-macizo-cuadrado-de-0-90-x-2-50-m_682_300x.jpg?v=1590761487',
+    'Grade Maciço Quadrado Rombo 0.90 x 2.50 m': 'https://securfix.pt/cdn/shop/products/reja-macizo-cuadrado-rombo-de-0-90-x-2-50-m_126_300x.jpg?v=1590761494',
+    'Grade Modelo Aspe 0.60 x 2.50 m': 'https://securfix.pt/cdn/shop/products/reja-modelo-aspe-de-0-60-x-2-50-m_422_300x.jpg?v=1590761499',
+    'Grade Modelo Cadi 0.60 x 2.50 m': 'https://securfix.pt/cdn/shop/products/reja-modelo-cadi-de-0-60-x-2-50-m_848_300x.jpg?v=1590761502',
+    'Grade Modelo Montblanc 0.60 x 2.50 m': 'https://securfix.pt/cdn/shop/products/reja-modelo-montblanc-de-0-60-x-2-50-m_242_300x.jpg?v=1590761516',
+    'Rolo Arame Farpado Verde': 'https://securfix.pt/cdn/shop/products/rollo-alambre-espino-verde-mallas_691_00b85586-48ec-4114-b310-3121e0430e5a_300x.jpg?v=1623158957',
+    'Rolo Arame Farpado Galvanizado': 'https://securfix.pt/cdn/shop/products/rollo-alambre-espino-galvanizado-250-m-mallas_928_129694a3-a50e-4fbb-87fe-853127c28308_300x.jpg?v=1623158928',
+    'Rolo Arame Plastificado 3 Kg': 'https://securfix.pt/cdn/shop/products/rollo-alambre-plastificado-3-kg-n-1417_560_300x.jpg?v=1590762357',
+    'Rolo Arame Galvanizado': 'https://securfix.pt/cdn/shop/products/rollo-alambre-galvanizado-n-15-1-kg-2-40-mm_222_300x.jpg?v=1590762325',
+    'Rolo Arame Recozido': 'https://securfix.pt/cdn/shop/products/rollo-alambre-recocido-n-08_511_300x.jpg?v=1590762360',
+    'Poste Malha Hercules Verde': 'https://securfix.pt/cdn/shop/products/poste-cremallera-quickfix-verde-1-30-m-para-malla-de-00-postes_264_300x.jpg?v=1590761356',
+    'Poste Malha Hercules Branco': 'https://securfix.pt/cdn/shop/products/base-poste-hercules-blanco_9bd750a2-d237-4528-a2c5-6d983441d6bf_300x.jpg?v=1685530548',
+    'Poste Malha Hercules Gris Antracita': 'https://securfix.pt/cdn/shop/products/base-acero-para-poste-hercules-gris_300x.jpg?v=1685530548',
+    'Poste Malha Hercules Galvanizado': 'https://securfix.pt/cdn/shop/products/baseaceroparapostehercules_300x.jpg?v=1590761380',
+    'Poste Cremallera Quickfix Verde': 'https://securfix.pt/cdn/shop/products/poste-cremallera-quickfix-verde-1-30-m-para-malla-de-00-postes_264_300x.jpg?v=1590761356',
+    'Poste Intermediário Verde': 'https://securfix.pt/cdn/shop/products/poste-intermedio-verde-para-malla-metalica-1-05-de-0-80-m-sin-base_470px_300x.jpg?v=1622560650',
+    'Poste Intermediário Galvanizado': 'https://securfix.pt/cdn/shop/products/poste-intermedio-galvanizada-para-malla-metalica-1-05-de-0-80-m-sin-base-postes-intermedios_762_300x.jpg?v=1590761380',
+    'Poste Terminal Verde': 'https://securfix.pt/cdn/shop/products/poste-terminal-verde-para-malla-metalica-1-05-de-0-80-m-sin-base_470px_300x.jpg?v=1622560744',
+    'Poste Terminal Galvanizado': 'https://securfix.pt/cdn/shop/products/poste-terminal-galvanizado-para-malla-metalica-1-25-de-00-m-sin-base-izquierda_470px_300x.jpg?v=1622560554',
+    'Poste de Reforço Verde': 'https://securfix.pt/cdn/shop/products/poste-refuerzo-verde-para-malla-metalica-1-05-de-0-80-m-sin-base-postes_470px_300x.jpg?v=1622560567',
+    'Poste de Reforço Galvanizado': 'https://securfix.pt/cdn/shop/products/poste-refuerzo-galvanizado_300x.jpg?v=1659981999',
+    'Poste Canto/Extensão Verde': 'https://securfix.pt/cdn/shop/products/poste-esquineroprolongador-verde-para-malla-metalica-1-05-m-tela-de-0-80-sin-base-postes-esquineros_470px_300x.jpg?v=1622560666',
+    'Poste Canto/Extensão Galvanizado': 'https://securfix.pt/cdn/shop/products/poste-esquineroprolongador-galvanizado-para-malla-metalica-1-05-m-tela-de-0-80-sin-base-postes-esquineros_470px_300x.jpg?v=1622560682',
+    'Poste Tornapunta Galvanizado': 'https://securfix.pt/cdn/shop/products/poste-tornapunta-galvanizado-para-malla-metalica-de-1-50-m-postes-tornapuntas_826_300x.jpg?v=1590761425',
+    'Poste Tornapunta Verde': 'https://securfix.pt/cdn/shop/products/poste-tornapunta-verde-para-malla-metalica-de-0-80-m-postes-tornapuntas_332_300x.jpg?v=1590761622',
+    'Barra Tensão Plastificada Verde': 'https://securfix.pt/cdn/shop/products/pletina_verde_arranque_simple_torsion_300x.jpg?v=1658934356',
+    'Porta Corta-Fogo P60 (EI 60) C5 1 Folha': 'https://securfix.pt/cdn/shop/products/puerta-cortafuego-standard-G6_1hoja_300x.jpg?v=1658356479',
+    'Porta Corta-Fogo P60 (EI 60) C5 2 Folhas': 'https://securfix.pt/cdn/shop/files/puerta-cortafuegos-2-hojas_87ca3b90-617d-4800-a46f-3ad9115842bd_300x.jpg?v=1707484483',
+    'Porta Corta-Fogo P90 (EI 90) C5 1 Folha': 'https://securfix.pt/cdn/shop/products/puerta-cortafuego-standard-G6_1hoja_300x.png?v=1658356505',
+    'Porta Corta-Fogo RF 90 (EI2 90) C5 2 Folhas': 'https://securfix.pt/cdn/shop/files/puerta-cortafuegos-2-hojas_300x.jpg?v=1707484401',
+    'Porta Corta-Fogo P120 (EI 120) C5 1 Folha': 'https://securfix.pt/cdn/shop/files/puerta-cortafuego-rf120_300x.jpg?v=1685371334',
+    'Porta Segurança Cearco Grau 3 Standard 3 pontos': 'https://securfix.pt/cdn/shop/files/PUERTA_ACORAZADA_CEARCO_CLASICA-BLANCA_B4_3PTS_300x.jpg?v=1685531439',
+    'Porta Blindada Verona V8 B4 Grau 3': 'https://securfix.pt/cdn/shop/files/PUERTA_ACORAZADA_VERONA_V8_NEGRO_B4BL_300x.jpg?v=1685515564',
+    'Porta Segurança Cearco Grau 3 Verona Dupla': 'https://securfix.pt/cdn/shop/files/PUERTA_ACORAZADA_VERONA_DOBLE_HOJA_BLANCA_B4BL_300x.jpg?v=1685516502',
+    'Porta Segurança Triana B4 Grau 3 3 Pontos': 'https://securfix.pt/cdn/shop/files/PUERTA-ACORAZADA-TRIANA-B4-CASTANO-RUSTICO_300x.jpg?v=1690196241',
+    'Porta Segurança Triana Dupla B4 Grau 3': 'https://securfix.pt/cdn/shop/files/PUERTA_ACORAZADA_DOBLE_CASETON_BLANCA_B4_300x.jpg?v=1685629888',
+    'Porta Segurança Cearco Grau 4 Omega Verona V8': 'https://securfix.pt/cdn/shop/products/PUERTA_ACORAZADA_VERONA_V8_NEGRA_OMEGA-CEARCO_9ce639a2-5592-44b8-959f-5995a77020cf_300x.jpg?v=1681980142',
+    'Porta Segurança Cearco Grau 3 Milan 4 Vidros': 'https://securfix.pt/cdn/shop/files/PUERTA_ACORAZADA_MILAN_PALISANDRO_B4_2c3f5e6d-f3e0-4db0-8c82-fdefd56ec507_300x.jpg?v=1686319590',
+    'Porta Acorazada Cearco Provenzal': 'https://securfix.pt/cdn/shop/files/puerta-acorazada-cearco-provenzal_300x.jpg?v=1685532570',
+    'Portão Rede Verde Premium 1m': 'https://securfix.pt/cdn/shop/products/puerta-mallazo-verde-bisbaldo-premium-100_300x.jpg?v=1674727397',
+    'Portão Rede Branca Premium 1m': 'https://securfix.pt/cdn/shop/products/puerta-mallazo-blanca-aldaba-premium-100_300x.jpg?v=1674729429',
+    'Portão Rede Gris Antracita Premium 1m': 'https://securfix.pt/cdn/shop/products/puerta-mallazo-gris-aldaba-premium-100_300x.jpg?v=1674732152',
+    'Portão Rede Galvanizada 1m': 'https://securfix.pt/cdn/shop/files/puerta-valla-mallazo-galvanizada-aldaba-premium-100_300x.jpg?v=1689590093',
+    'Portão Rede Ondulado Galvanizada 0.90x1.00m': 'https://securfix.pt/cdn/shop/products/puerta-mallazo-galvanizada-0-90-x-1-00-m_541_300x.jpg?v=1590761431',
+    'Portão Rede Ondulado Verde': 'https://securfix.pt/cdn/shop/products/puerta-mallazo-verde-0-90-x-1-00-m_500px_300x.jpg?v=1622561755',
+    'Portão Rede Ligeira Verde 2 Folhas': 'https://securfix.pt/cdn/shop/products/puerta-mallazo-basic-doble-verde-securfix_300x.jpg?v=1660260501',
+    'Portão Rede Ligeira Branca 2 Folhas': 'https://securfix.pt/cdn/shop/products/puerta-mallazo-basic-doble-blanca-securfix_300x.jpg?v=1660260953',
+    'Portão Rede Ligeira Cinza Escuro 2 Folhas': 'https://securfix.pt/cdn/shop/products/puerta-mallazo-basic-doble-gris-securfix_300x.jpg?v=1660260832',
+    'Portão Malha Galvanizada Luz 2 Folhas': 'https://securfix.pt/cdn/shop/files/puerta-mallazo-ligera-galvanizada-dos-hojas_300x.jpg?v=1727683012',
+    'Porta Multiuso Branca': 'https://securfix.pt/cdn/shop/files/puerta_multiusos_ral9010---derecha_amarilla_300x.jpg?v=1707836841',
+    'Porta Multiuso Grade': 'https://securfix.pt/cdn/shop/files/puerta_multiusos_ventilada_300x.jpg?v=1708334462',
+    'Porta Multiuso Duas Folhas com Grade': 'https://securfix.pt/cdn/shop/files/Puerta_multiusos_2H_ventilada_derecha_300x.jpg?v=1708347552',
+    'Porta Trastero Galvanizada': 'https://securfix.pt/cdn/shop/files/puerta-trastero-galvanizada_300x.jpg?v=1707836438',
+    'Porta Trastero Galvanizada com Grade': 'https://securfix.pt/cdn/shop/files/batiente_multiusos_ventilada_PRD_300x.jpg?v=1708342319',
+    'Estrutura Porta de Correr Orchidea Basic': 'https://securfix.pt/cdn/shop/products/OrchideaBasic_Estrutura_300x.jpg?v=1661896714',
+    'Casoneto Orchidea PYL Simples': 'https://securfix.pt/cdn/shop/products/OrchideaPYLsimple_Estrutura_300x.jpg?v=1661959294',
+    'Casoneto Orchidea PYL Duplo': 'https://securfix.pt/cdn/shop/products/OrchideaPYLdoble_Casoneto_300x.jpg?v=1661968165',
+    'Cassete Porta de Correr Reboco': 'https://securfix.pt/cdn/shop/products/casoneto-puerta-corredera-enfoscar_300x.jpg?v=1660769787',
+    'Gradil Tramex': 'https://securfix.pt/cdn/shop/products/rejilla-tramex-detalles-pletina-varillas_300x.jpg?v=1676385182',
+    'Barra Antipânico': 'https://securfix.pt/cdn/shop/products/barra-antipanico-fast-touch_300x.jpg?v=1658440648',
+    'Fechadura Antitaladro': 'https://securfix.pt/cdn/shop/products/ESCUDO-ANTITALADRO-CROMADO-PUERTA-ACORAZADA_300x.jpg?v=1637870256',
+    'Cierrapuertas Standard': 'https://securfix.pt/cdn/shop/files/cierrapuertas-puerta-cortafuegos_300x.jpg?v=1683534471',
+    'Cierrapuertas Premium': 'https://securfix.pt/cdn/shop/files/cierrapuertas-puertas-cortafuegos_300x.jpg?v=1683534446',
+    'Vigia Corta-Fogo': 'https://securfix.pt/cdn/shop/products/ojo-de-buey-ventana_300x.jpg?v=1658762092',
+    'Eletroímã': 'https://securfix.pt/cdn/shop/products/electroiman_300x.jpg?v=1658762113',
+    'Seletor de Fecho': 'https://securfix.pt/cdn/shop/files/selector-de-cierre-sin-prolongador_300x.jpg?v=1683538007',
+    'Varão Nervurado 8mm': 'https://securfix.pt/cdn/shop/products/varillas-corrugadas-securfix_300x.jpg?v=1678793767',
+    'Varão Nervurado 10mm': 'https://securfix.pt/cdn/shop/products/varillas-corrugadas-securfix_300x.jpg?v=1678793767',
+    'Tinta em Spray Verde': 'https://securfix.pt/cdn/shop/products/pletina_verde_arranque_simple_torsion_300x.jpg?v=1658934356',
+    'Tinta em Spray Galvanizado': 'https://securfix.pt/cdn/shop/products/pletina_verde_arranque_simple_torsion_300x.jpg?v=1658934356',
+  },
+
+  services: {
+    'Vedação Residencial': 'https://securfix.pt/cdn/shop/files/panel-valla-hercules_1080x.jpg?v=1641388137',
+    'Vedação Industrial': 'https://securfix.pt/cdn/shop/files/valla-metalica-acero-galvanizado_1080x.jpg?v=1643736882',
+    'Vedação Agrícola': 'https://securfix.pt/cdn/shop/files/malla-simple-torsion-galvanizada-con-hoja_1080x.jpg?v=1685545514',
+  },
+
+  blog: [
+    'https://securfix.pt/cdn/shop/articles/puertas-para-fincas-baratas_7ffdf3ec-5ccc-4a56-9d5f-d0dd12394547_540x.jpg?v=1760076703',
+    'https://securfix.pt/cdn/shop/articles/Espesor_valla_hercules_fe7ebeee-76e5-4c44-8912-2ae9253de158_540x.jpg?v=1759154351',
+    'https://securfix.pt/cdn/shop/articles/cual-es-la-valla-de-jardin-mas-resistente_b38471a9-2ee2-4a3e-a272-a414a619ac4d_540x.jpg?v=1750432136',
+    'https://securfix.pt/cdn/shop/articles/jaula_para_perros_e21aa057-71cb-4f76-b5f1-bc08b1b27f4d_540x.jpg?v=1771576377',
+    'https://securfix.pt/cdn/shop/articles/Como_elegir_puertas_entrada_exterior_2_324a945c-f545-4f6f-803a-99310620c4b6_540x.jpg?v=1764756918',
+    'https://securfix.pt/cdn/shop/articles/puertas-para-fincas-baratas_7ffdf3ec-5ccc-4a56-9d5f-d0dd12394547_540x.jpg?v=1760076703',
+  ],
+
+  testimonials: [
+    'https://securfix.pt/cdn/shop/files/opinion-1_100x100.jpg?v=1613720742',
+    'https://securfix.pt/cdn/shop/files/opinion_100x100.jpg?v=1645131537',
+    'https://securfix.pt/cdn/shop/files/opinion_anna_100x100.jpg?v=1645132557',
+    'https://securfix.pt/cdn/shop/files/opinion_4_100x100.jpg?v=1655213170',
+    'https://securfix.pt/cdn/shop/files/opinion5_100x100.jpg?v=1655213687',
+    'https://securfix.pt/cdn/shop/files/opinion_6_100x100.jpg?v=1655214499',
+  ],
+} as const;
+
+// Helper to get product image with fallback to category image
+export function getProductImage(productName: string): string {
+  const directMatch = images.allProducts[productName as keyof typeof images.allProducts];
+  if (directMatch) return directMatch;
+
+  const featuredMatch = images.featuredProducts[productName as keyof typeof images.featuredProducts];
+  if (featuredMatch) return featuredMatch;
+
+  // Fallback: find the closest category image
+  const categoryMap: Record<string, string> = {
+    'Painel': images.categories['Painel de Vedação'],
+    'Hercules': images.categories['Painel de Vedação'],
+    'Rede Malha Solta': images.categories['Rede Malha Solta'],
+    'Rolo': images.categories['Rede Malha Solta'],
+    'Eletrossoldada': images.categories['Rede Eletrossoldada'],
+    'Grade': images.categories['Grades e Corrimãos'],
+    'Arame': images.categories['Rede Malha Solta'],
+    'Poste': images.categories['Painel de Vedação'],
+    'Cortafuego': images.categories['Portas Corta-Fogo'],
+    'Corta-Fogo': images.categories['Portas Corta-Fogo'],
+    'Segurança': images.categories['Portas de Segurança'],
+    'Seguranca': images.categories['Portas de Segurança'],
+    'Mallazo': images.categories['Portões de Rede'],
+    'Multiuso': images.categories['Portas de Serviço'],
+    'Trastero': images.categories['Portas de Serviço'],
+    'Correr': images.categories['Portas de Correr'],
+    'Casoneto': images.categories['Portas de Correr'],
+    'Cassete': images.categories['Portas de Correr'],
+    'Tramex': images.categories['Gradil Tramex'],
+    'Barra Antipânico': images.allProducts['Barra Antipânico'],
+    'Fechadura': images.allProducts['Fechadura Antitaladro'],
+    'Cierrapuertas': images.allProducts['Cierrapuertas Standard'],
+    'Vigia': images.allProducts['Vigia Corta-Fogo'],
+    'Eletroímã': images.allProducts['Eletroímã'],
+    'Seletor': images.allProducts['Seletor de Fecho'],
+    'Varão': images.allProducts['Varão Nervurado 8mm'],
+    'Tinta': images.allProducts['Tinta em Spray Verde'],
+  };
+
+  for (const [key, fallbackUrl] of Object.entries(categoryMap)) {
+    if (productName.includes(key) && fallbackUrl) return fallbackUrl;
+  }
+
+  return images.categories['Painel de Vedação']; // ultimate fallback
+}

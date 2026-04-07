@@ -1,21 +1,23 @@
 'use client';
 
 import { useRef } from 'react';
-import { Home, Factory, TreePine, Check, ChevronRight } from 'lucide-react';
+import { Check, ChevronRight } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
+import { images } from '@/lib/images';
 
 interface ServiceCard {
-  icon: React.ReactNode;
   title: string;
   description: string;
   items: string[];
+  image: string;
 }
 
 const services: ServiceCard[] = [
   {
-    icon: <Home className="w-10 h-10" />,
     title: 'Vedação Residencial',
+    image: images.services['Vedação Residencial'],
     description:
       'Cercas para jardins, chalets, piscinas, moradias unifamiliares e zonas residenciais. Podem ser utilizadas tanto para delimitar e manter um terreno protegido, como para decorar ou dar appeal estético a uma propriedade.',
     items: [
@@ -27,8 +29,8 @@ const services: ServiceCard[] = [
     ],
   },
   {
-    icon: <Factory className="w-10 h-10" />,
     title: 'Vedação Industrial',
+    image: images.services['Vedação Industrial'],
     description:
       'Cercas industriais e recintos para obras, polígonos industriais, estabelecimentos comerciais. Soluções robustas e duradouras para proteção de áreas industriais.',
     items: [
@@ -40,8 +42,8 @@ const services: ServiceCard[] = [
     ],
   },
   {
-    icon: <TreePine className="w-10 h-10" />,
     title: 'Vedação Agrícola',
+    image: images.services['Vedação Agrícola'],
     description:
       'Recintos agrícolas para gado, avicultura, culturas. Soluções adequadas para a proteção de animais e delimitação de terrenos agrícolas.',
     items: [
@@ -108,11 +110,16 @@ export default function ServicesSection() {
               variants={cardVariants}
               className="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
             >
-              {/* Gradient Top Section */}
-              <div className="relative h-[120px] bg-gradient-to-br from-[#ea6663] to-[#d94f4c] flex items-center justify-center">
-                <div className="text-white transform transition-transform duration-300 group-hover:scale-110">
-                  {service.icon}
-                </div>
+              {/* Image Header */}
+              <div className="relative h-40 overflow-hidden">
+                <Image
+                  src={service.image}
+                  alt={service.title}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  unoptimized
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50" />
               </div>
 
               {/* Content Section */}

@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import {
-  Package,
   ShoppingCart,
-  Filter,
   ChevronDown,
   SlidersHorizontal,
 } from 'lucide-react';
+import { getProductImage } from '@/lib/images';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -215,9 +215,16 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
       layout
       className="group bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden flex flex-col"
     >
-      {/* Image placeholder */}
-      <div className="relative bg-gray-100 aspect-[4/3] flex items-center justify-center">
-        <Package className="w-12 h-12 text-gray-300 group-hover:scale-110 transition-transform duration-300" />
+      {/* Product image */}
+      <div className="relative aspect-[4/3] bg-gray-100 overflow-hidden">
+        <Image
+          src={getProductImage(product.name)}
+          alt={product.name}
+          fill
+          className="object-cover hover:scale-105 transition-transform duration-300"
+          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          unoptimized
+        />
 
         {/* OFERTA badge */}
         {onSale && (

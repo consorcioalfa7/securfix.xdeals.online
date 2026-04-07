@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import Image from 'next/image';
 import {
   Menu,
   X,
@@ -8,7 +9,6 @@ import {
   ChevronRight,
   Phone,
   MessageCircle,
-  Shield,
   Search,
   ShoppingCart,
   User,
@@ -382,16 +382,15 @@ export default function Header() {
         <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16 md:h-[72px]">
           {/* Logo */}
           <a href="#" className="flex items-center gap-2 group">
-            <Shield
-              size={30}
-              className="text-[#ea6663] transition-transform duration-200 group-hover:scale-110"
-              strokeWidth={2.2}
+            <Image
+              src="https://securfix.pt/cdn/shop/files/logo_securfix_250x@2x.png?v=1613722450"
+              alt="Securfix"
+              width={140}
+              height={40}
+              className="h-8 md:h-10 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+              unoptimized
+              priority
             />
-            <span className="text-xl sm:text-2xl font-extrabold tracking-wider text-gray-900"
-              style={{ fontFamily: 'Oswald, sans-serif' }}
-            >
-              SECURFIX
-            </span>
           </a>
 
           {/* Right side – desktop */}
@@ -532,13 +531,14 @@ export default function Header() {
           {/* Mobile panel header */}
           <div className="flex items-center justify-between px-5 h-16 border-b border-gray-100 shrink-0">
             <div className="flex items-center gap-2">
-              <Shield size={24} className="text-[#ea6663]" strokeWidth={2.2} />
-              <span
-                className="text-lg font-extrabold tracking-wider text-gray-900"
-                style={{ fontFamily: 'Oswald, sans-serif' }}
-              >
-                SECURFIX
-              </span>
+              <Image
+                src="https://securfix.pt/cdn/shop/files/logo_securfix_250x@2x.png?v=1613722450"
+                alt="Securfix"
+                width={140}
+                height={40}
+                className="h-8 w-auto object-contain"
+                unoptimized
+              />
             </div>
             <button
               onClick={closeMobile}

@@ -1,14 +1,17 @@
 'use client';
 
-import { BookOpen, Calendar, ArrowRight } from 'lucide-react';
+import { Calendar, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
+import Image from 'next/image';
+import { images } from '@/lib/images';
 
 interface BlogPost {
   title: string;
   category: string;
   date: string;
+  image: string;
 }
 
 const blogPosts: BlogPost[] = [
@@ -16,31 +19,37 @@ const blogPosts: BlogPost[] = [
     title: 'Como Instalar Painéis de Vedação',
     category: 'Tutoriais',
     date: '15 Dez 2025',
+    image: images.blog[0],
   },
   {
     title: 'Guia Completo de Vedações Residenciais',
     category: 'Guia',
     date: '10 Dez 2025',
+    image: images.blog[1],
   },
   {
     title: 'Vedações Industriais: O que Precisa Saber',
     category: 'Guia',
     date: '5 Dez 2025',
+    image: images.blog[2],
   },
   {
     title: 'Como Escolher a Porta de Segurança Ideal',
     category: 'Conselhos',
     date: '28 Nov 2025',
+    image: images.blog[3],
   },
   {
     title: 'Rede Ovelheira vs Rede Hexagonal: Qual Escolher?',
     category: 'Comparação',
     date: '20 Nov 2025',
+    image: images.blog[4],
   },
   {
     title: 'Como Comprar Porta Corta-Fogo',
     category: 'Tutoriais',
     date: '15 Nov 2025',
+    image: images.blog[5],
   },
 ];
 
@@ -111,11 +120,15 @@ export default function BlogSection() {
               className="group overflow-hidden rounded-lg bg-white shadow-sm transition-shadow duration-300 hover:shadow-md"
             >
               <a href="#" className="block" aria-label={post.title}>
-                {/* Image Placeholder */}
-                <div className="relative aspect-video bg-gray-100">
-                  <div className="flex h-full items-center justify-center">
-                    <BookOpen className="h-12 w-12 text-gray-300 transition-transform duration-300 group-hover:scale-110" />
-                  </div>
+                {/* Blog Image */}
+                <div className="relative aspect-video overflow-hidden">
+                  <Image
+                    src={post.image}
+                    alt={post.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    unoptimized
+                  />
                   {/* Category Badge */}
                   <span className="absolute top-3 right-3 rounded-full bg-[#ea6663] px-3 py-1 text-xs font-medium text-white">
                     {post.category}

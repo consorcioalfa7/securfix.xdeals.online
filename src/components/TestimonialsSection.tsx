@@ -11,12 +11,15 @@ import {
   Quote,
 } from 'lucide-react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
+import Image from 'next/image';
+import { images } from '@/lib/images';
 
 interface Testimonial {
   name: string;
   role: string;
   text: string;
   rating: number;
+  avatar: string;
 }
 
 interface TrustItem {
@@ -31,36 +34,42 @@ const testimonials: Testimonial[] = [
     role: 'Empreendedor',
     text: 'Excelente qualidade nos painéis de vedação. A entrega foi rápida e o produto superou as minhas expectativas. Recomendo a Securfix a todos os profissionais do setor.',
     rating: 5,
+    avatar: images.testimonials[0],
   },
   {
     name: 'Ana Rodrigues',
     role: 'Arquiteta',
     text: 'As grades e corrimãos que encomendei ficaram perfeitas no projeto. Qualidade de fábrica a preços muito competitivos. O suporte ao cliente foi sempre disponível.',
     rating: 5,
+    avatar: images.testimonials[1],
   },
   {
     name: 'Manuel Santos',
     role: 'Construtor',
     text: 'Trabalho com a Securfix há mais de 3 anos. A consistência na qualidade e a pontualidade nas entregas fazem toda a diferença nos meus projetos.',
     rating: 5,
+    avatar: images.testimonials[2],
   },
   {
     name: 'Joana Ferreira',
     role: 'Paisagista',
     text: 'As soluções de vedação residencial da Securfix são ideais para os meus projetos de jardins. Variedade de opções e preços imbatíveis.',
     rating: 4,
+    avatar: images.testimonials[3],
   },
   {
     name: 'Pedro Costa',
     role: 'Engenheiro Civil',
     text: 'Para obras industriais, os painéis de obra e as redes eletrossoldadas da Securfix são a melhor opção. Robustez e durabilidade garantidas.',
     rating: 5,
+    avatar: images.testimonials[4],
   },
   {
     name: 'Maria Lopes',
     role: 'Gestora de Propriedades',
     text: 'As portas de segurança e corta-fogo são de excelente qualidade. O processo de compra online é simples e eficiente.',
     rating: 5,
+    avatar: images.testimonials[5],
   },
 ];
 
@@ -118,10 +127,21 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
         &ldquo;{testimonial.text}&rdquo;
       </p>
 
-      {/* Name & Role */}
-      <div className="border-t border-gray-100 pt-4">
-        <p className="font-bold text-gray-900 text-sm">{testimonial.name}</p>
-        <p className="text-gray-400 text-xs mt-0.5">{testimonial.role}</p>
+      {/* Avatar, Name & Role */}
+      <div className="border-t border-gray-100 pt-4 flex items-center gap-3">
+        <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+          <Image
+            src={testimonial.avatar}
+            alt={testimonial.name}
+            fill
+            className="object-cover"
+            unoptimized
+          />
+        </div>
+        <div>
+          <p className="font-bold text-gray-900 text-sm">{testimonial.name}</p>
+          <p className="text-gray-400 text-xs mt-0.5">{testimonial.role}</p>
+        </div>
       </div>
     </div>
   );

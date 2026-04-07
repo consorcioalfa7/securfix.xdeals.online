@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import {
   Phone,
   Mail,
@@ -131,9 +132,14 @@ export default function Footer() {
           <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-12">
             {/* Column 1: SECURFIX Logo & Info */}
             <div>
-              <h2 className="mb-4 text-2xl font-bold tracking-tight text-white">
-                SECURFIX
-              </h2>
+              <Image
+                src="https://securfix.pt/cdn/shop/files/DISENO_LOGO_HORIZONTAL.png?v=1613720485"
+                alt="Securfix"
+                width={200}
+                height={50}
+                className="h-12 w-auto object-contain mb-4 brightness-0 invert"
+                unoptimized
+              />
               <p className="mb-6 text-sm leading-relaxed text-gray-400">
                 Especialistas em vedações metálicas com mais de 50 anos de
                 experiência. Preços de fábrica, entrega rápida e assessoria
