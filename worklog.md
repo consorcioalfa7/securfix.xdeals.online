@@ -806,7 +806,147 @@ Apple Pay, Google Pay, Maestro, Mastercard, Shop Pay, Visa
 ### Files Created
 
 #### 1. `src/components/ProductCatalog.tsx`
-- `'use client'` component — comprehensive full product catalog with ALL 84 products, filtering, and pagination
+- `'u
+
+---
+
+## Task ID: 4 — UI Components & API Routes
+
+**Date:** 2026-01-06
+**Status:** ✅ Complete
+
+### Files Created
+
+#### Components
+
+#### 1. `src/components/LanguageSwitcher.tsx`
+- `'use client'` component — dropdown for language selection
+- Uses `useI18n` hook from `@/lib/i18n-context` (locale, setLocale, locales, localeInfo)
+- Shows current language flag + name with Globe icon trigger and chevron
+- Dropdown with all 7 languages (PT, ES, FR, EN, DE, NL, IT) with flag emojis + native names
+- Active language highlighted in coral (#ea6663) with checkmark
+- Closes on outside click via useRef + mousedown event listener
+- Mobile-friendly: flag hidden on small screens, full label hidden on small screens
+- ARIA: `aria-haspopup="listbox"`, `role="listbox"`, `role="option"`, `aria-selected`
+- Tailwind-only styling with animate-in transitions
+
+#### 2. `src/components/CartDrawer.tsx`
+- `'use client'` component — sliding cart drawer from right side
+- Uses `useCartStore` (items, isOpen, closeCart, removeItem, updateQuantity, totalItems, totalPrice)
+- Uses `useI18n` for all text (t(), formatCurrency)
+- Dark backdrop overlay with click-to-close
+- Responsive: full width mobile, max-w-md desktop
+- Empty state: Package icon + message + "Continuar a Comprar" button
+- Items list with next/image (unoptimized), name, sale/original price, quantity +/- buttons, remove X
+- Item count badge in header (coral bg)
+- Bottom sticky bar: Subtotal, IVA text, Total, "Finalizar Compra" (black) and "Compra EXPRESS" (coral #ea6663) buttons
+- "Continuar a Comprar" close button in header
+- Props: onCheckout, onExpressCheckout callbacks
+
+#### 3. `src/components/CheckoutModal.tsx`
+- `'use client'` component — full-screen NeXFlowX checkout modal
+- Props: isOpen, onClose, orderId (optional), onPaymentSuccess
+- States: idle (loading) → checkout → success/error
+- On open: calls POST /api/payment to create payment link
+- Loading state: spinner + processing text
+- Checkout state: iframe with shareable_url (450px max-width, 600px height, rounded)
+  - Listens for window.postMessage from https://checkout.nexflowx.tech
+  - Transitions to success on status === 'success'
+- Success state: green checkmark, order ID, "Acompanhar Encomenda" and "Continuar a Comprar" buttons
+- Error state: red X icon, retry and close buttons
+- All text via t() from useI18n
+- Proper state management avoiding setState-in-effect lint issues
+
+#### 4. `src/components/OrderTrackingModal.tsx`
+- `'use client'` component — order tracking modal
+- Props: isOpen, onClose, initialOrderId (optional)
+- Search input with tracking number + search button
+- On search: GET /api/orders/[id]
+- 5-step progress bar: preparation → ready → transit → distribution → delivered
+- Each step: icon (Package, Clock, Truck, MapPin, CheckCircle2), label, description, timestamp
+- Completed steps: green checkmarks; current: coral (#ea6663) circle with loading animation; future: gray
+- Step connectors: colored lines (green=completed, gray=pending)
+- Delivery estimate section with timeframes (PT/ES 3d, FR/IT 5d, EU 7d, far 15d)
+- Order items summary section
+- Responsive modal with max-h-[85vh] and scroll
+
+#### 5. `src/components/ChatWidget.tsx`
+- `'use client'` component — floating AI chat widget
+- Coral (#ea6663) floating button with MessageCircle icon, positioned bottom-left
+- Chat panel: max-w-sm, slide-up animation
+- Header: coral bg, "Assistente Securfix" title, "Online" status
+- Messages area (max-h-[350px]) with auto-scroll
+- Welcome message from bot on mount
+- User messages: right-aligned, coral bg, white text
+- Bot messages: left-aligned, white bg with shadow
+- Typing indicator: 3 animated bouncing dots
+- Avatar icons: bot (coral circle + Bot icon), user (gray circle + User icon)
+- Message timestamps in locale format
+- POST to /api/chat with { message, locale }
+- Loading state with Loader2 spinner
+- Form submission with Enter key support
+
+#### 6. `src/components/FooterPageModal.tsx`
+- `'use client'` component — generic modal for footer subpage content
+- Props: isOpen, onClose, pageKey (string), title (string)
+- 10 comprehensive pages with real, professional content in Portuguese:
+  - **about**: Quem Somos — company overview, stats (50+ years, 16,000+ m², 48-72h delivery, 4.6/5 rating), mission/vision
+  - **contact**: Contact — 3 location cards (Madrid, Barcelona, Lisbon), phone numbers, email
+  - **legal**: Condições Legais — 7 sections (general info, terms, pricing, delivery, IP, data protection, applicable law)
+  - **privacy**: Política de Privacidade — RGPD-compliant privacy policy with 7 sections
+  - **cookies**: Política de Cookies — 4 cookie types with descriptions
+  - **shipping**: Condições de Envio — delivery table (PT/ES 2-3d, FR/IT 3-5d, DE/NL/BE 5-7d, etc.), shipping info
+  - **returns**: Cancelar e Devolver — 14-day right, conditions, return process, refund policy
+  - **price_guarantee**: Garantia de Preço Mais Baixo — price matching, factory prices, professional pricing
+  - **faq**: Perguntas Frequentes — 10 FAQ items with shadcn/ui Accordion
+  - **careers**: Trabalhe Connosco — 3 open positions, spontaneous application info
+- Uses shadcn/ui Accordion for FAQ
+- Max-w-3xl width, max-h-[85vh] scrollable content
+- Close button in sticky header
+
+### API Routes
+
+#### 7. `src/app/api/payment/route.ts`
+- POST handler
+- Reads: { amount, currency, items, orderId }
+- Calls NeXFlowX API (POST https://api.nexflowx.tech/api/v1/payment-links) with x-api-key header
+- Falls back to demo mode (fake URL) if API key not set or call fails
+- Returns { shareable_url, id, demo? }
+
+#### 8. `src/app/api/webhook/route.ts`
+- POST handler for NeXFlowX webhooks
+- Validates x-nexflowx-signature header (HMAC SHA256 with WEBHOOK_SECRET)
+- Processes 'payment.gateway_confirmed' events
+- Creates or updates orders via orders-store
+- Returns { received: true }
+
+#### 9. `src/app/api/orders/[id]/route.ts`
+- GET handler
+- Looks up order by ID from orders-store (getOrder)
+- Returns order JSON with status, events, items, timestamps
+- Returns 404 if not found
+
+#### 10. `src/app/api/chat/route.ts`
+- POST handler for AI chat
+- Reads: { message, locale }
+- Uses z-ai-web-dev-sdk (ZAI.create() + chat.completions.create) with google/gemini-2.0-flash-001
+- Comprehensive system prompt with Securfix product knowledge, contact info, and company facts
+- Forces response language based on locale
+- Fallback response in user's language if AI service unavailable
+- Returns { message: string }
+
+### Design Tokens Applied
+- Primary coral: #ea6663 (active language, chat button, chat header, checkout buttons, progress bar current, typing indicator)
+- CTA buttons: bg-black text-white (checkout), bg-[#ea6663] text-white (express, track, search)
+- Modal backdrops: bg-black/60
+- Card backgrounds: white, gray-50
+- Text: text-gray-900 (headings), text-gray-600 (body), text-gray-400 (muted), text-gray-500 (secondary)
+- All Tailwind CSS — no custom CSS
+
+### Lint Check
+- `bun run lint` passes with 0 errors, 2 warnings (pre-existing in mini-services/chat-service)
+
+---se client'` component — comprehensive full product catalog with ALL 84 products, filtering, and pagination
 - **Section header:** "Catálogo Completo de Produtos" with coral underline on "Produtos" + descriptive subtitle about factory prices and IVA
 - **14 filter tabs:** "Todos", "Painel Hercules", "Rede Malha Solta", "Rede Eletrossoldada", "Grades", "Arames", "Postes", "Portas Corta-Fogo", "Portas de Segurança", "Portões de Rede", "Portas Multiuso", "Portas de Correr", "Tramex", "Acessórios"
   - Horizontal scrollable on mobile (`overflow-x-auto`), wrapped on desktop (`md:flex-wrap`)

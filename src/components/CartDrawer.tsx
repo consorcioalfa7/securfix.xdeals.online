@@ -1,0 +1,199 @@
+'use client';
+
+import Image from 'next/image';
+import { Package, X, Minus, Plus, ArrowLeft, ShoppingBag, Zap } from 'lucide-react';
+import { useCartStore } from '@/lib/cart-store';
+import { useI18n } from '@/lib/i18n-context';
+
+interface CartDrawerProps {
+  onCheckout?: () => void;
+  onExpressCheckout?: () => void;
+}
+
+export default function CartDrawer({ onCheckout, onExpressCheckout }: CartDrawerProps) {
+  const { items, isOpen, closeCart, removeItem, updateQuantity, totalItems, totalPrice } = useCartStore();
+  const { t, formatCurrency } = useI18n();
+
+  const total = totalPrice();
+  const count = totalItems();
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100]">
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 bg-black/50 transition-opacity duration-300"
+        onClick={closeCart}
+        aria-hidden="true"
+      />
+
+      {/* Drawer */}
+      <div
+        className="fixed inset-y-0 right-0 flex w-full max-w-md flex-col bg-white shadow-2xl transition-transform duration-300 ease-out"
+        style={{ transform: 'translateX(0)' }}
+        role="dialog"
+        aria-modal="true"
+        aria-label={t('cart.title')}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-gray-100 px-4 py-4 sm:px-6">
+          <div className="flex items-center gap-2">
+            <ShoppingBag className="h-5 w-5 text-[#ea6663]" />
+            <h2 className="text-lg font-bold text-gray-900">{t('cart.title')}</h2>
+            <span className="rounded-full bg-[#ea6663] px-2 py-0.5 text-xs font-bold text-white">
+              {count} {count === 1 ? t('cart.item') : t('cart.items')}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={closeCart}
+              className="flex items-center gap-1 rounded-md px-2 py-1.5 text-sm text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+              aria-label={t('cart.continue_shopping')}
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span className="hidden sm:inline">{t('cart.continue_shopping')}</span>
+            </button>
+            <button
+              onClick={closeCart}
+              className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+              aria-label={t('general.close')}
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Content */}
+        {items.length === 0 ? (
+          <div className="flex flex-1 flex-col items-center justify-center gap-4 px-4">
+            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gray-100">
+              <Package className="h-12 w-12 text-gray-300" />
+            </div>
+            <div className="text-center">
+              <p className="text-lg font-semibold text-gray-900">{t('cart.empty')}</p>
+              <p className="mt-1 text-sm text-gray-500">{t('cart.empty_text')}</p>
+            </div>
+            <button
+              onClick={closeCart}
+              className="mt-4 flex items-center gap-2 rounded-lg bg-black px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-gray-800"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              {t('cart.continue_shopping')}
+            </button>
+          </div>
+        ) : (
+          <>
+            {/* Item list */}
+            <div className="flex-1 overflow-y-auto px-4 py-4 sm:px-6">
+              <div className="space-y-4">
+                {items.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex gap-3 rounded-lg border border-gray-100 bg-white p-3 shadow-sm"
+                  >
+                    {/* Image */}
+                    <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md bg-gray-100">
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        fill
+                        unoptimized
+                        className="object-cover"
+                        sizes="80px"
+                      />
+                    </div>
+
+                    {/* Details */}
+                    <div className="flex flex-1 flex-col justify-between min-w-0">
+                      <div className="flex items-start justify-between gap-2">
+                        <h3 className="text-sm font-medium text-gray-900 line-clamp-2 leading-tight">
+                          {item.name}
+                        </h3>
+                        <button
+                          onClick={() => removeItem(item.id)}
+                          className="flex-shrink-0 rounded-md p-1 text-gray-300 transition-colors hover:bg-red-50 hover:text-red-500"
+                          aria-label={t('cart.remove')}
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+
+                      <div className="mt-1">
+                        <p className="text-xs text-gray-400 line-through">
+                          {formatCurrency(item.originalPrice)}
+                        </p>
+                        <p className="text-sm font-bold text-gray-900">
+                          {formatCurrency(item.salePrice)}
+                        </p>
+                      </div>
+
+                      <div className="mt-1 flex items-center justify-between">
+                        {/* Quantity controls */}
+                        <div className="flex items-center gap-1 rounded-md border border-gray-200">
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            className="flex h-7 w-7 items-center justify-center rounded-l-md text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+                            aria-label="Decrease quantity"
+                          >
+                            <Minus className="h-3 w-3" />
+                          </button>
+                          <span className="flex h-7 w-8 items-center justify-center border-x border-gray-200 text-xs font-medium text-gray-900">
+                            {item.quantity}
+                          </span>
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            className="flex h-7 w-7 items-center justify-center rounded-r-md text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+                            aria-label="Increase quantity"
+                          >
+                            <Plus className="h-3 w-3" />
+                          </button>
+                        </div>
+
+                        <p className="text-sm font-bold text-gray-900">
+                          {formatCurrency(item.salePrice * item.quantity)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Footer with totals */}
+            <div className="border-t border-gray-200 bg-gray-50 px-4 py-4 sm:px-6">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">{t('cart.subtotal')}</span>
+                  <span className="font-medium text-gray-900">{formatCurrency(total)}</span>
+                </div>
+                <p className="text-xs text-gray-400">{t('cart.vat')}</p>
+                <div className="flex items-center justify-between border-t border-gray-200 pt-2">
+                  <span className="text-base font-bold text-gray-900">{t('cart.total')}</span>
+                  <span className="text-lg font-bold text-gray-900">{formatCurrency(total)}</span>
+                </div>
+              </div>
+
+              <div className="mt-4 space-y-2">
+                <button
+                  onClick={onCheckout}
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-black px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-gray-800"
+                >
+                  <ShoppingBag className="h-4 w-4" />
+                  {t('cart.checkout')}
+                </button>
+                <button
+                  onClick={onExpressCheckout}
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#ea6663] px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-[#d94f4c]"
+                >
+                  <Zap className="h-4 w-4" />
+                  {t('cart.express_checkout')}
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}

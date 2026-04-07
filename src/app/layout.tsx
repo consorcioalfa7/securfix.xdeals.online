@@ -14,24 +14,32 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Securfix - Vedações Metálicas | Preços de Fábrica",
-  description: "Fabricantes de Vedações Metálicas, Cercas - Preços Líderes - Entrega no Local - Orçamento Sem Compromisso - Mais de 50 anos de Experiência no Setor - Assessoria Profissional",
-  keywords: ["vedações metálicas", "cercas", "painéis hercules", "portas corta-fogo", "portas de segurança", "securfix", "vedação residencial", "vedação industrial", "vedação agrícola"],
+  title: "Securfix - Vedações Metálicas | Preços de Fábrica | Entrega Europa",
+  description: "Fabricantes de Vedações Metálicas, Cercas - Preços Líderes - Entrega em toda a Europa - Orçamento Sem Compromisso - Mais de 50 anos de Experiência - Assessoria Profissional. Metal fencing, gates, doors at factory prices.",
+  keywords: [
+    "vedações metálicas", "cercas", "painéis hercules", "portas corta-fogo", "portas de segurança",
+    "securfix", "vedação residencial", "vedação industrial", "vedação agrícola",
+    "metal fencing", "chain link", "welded mesh", "fire doors", "security doors",
+    "vallados metálicos", "clôtures métalliques", "metallzäune",
+    "rejas", "cercas", "hekkwerk", "recinzioni",
+    "preços de fábrica", "entrega rápida", "Europa",
+  ],
   authors: [{ name: "Securfix - Hierros Tous, S.L.U" }],
   icons: {
-    icon: "https://securfix.pt/cdn/shop/files/favicon-securfix_32x32.png",
+    icon: "/favicon.svg",
+    apple: "/favicon.svg",
   },
   openGraph: {
-    title: "Securfix - Vedações Metálicas Preços de Fábrica",
-    description: "Fabricantes de Vedações Metálicas, Cercas - Preços Líderes - Entrega no Local - Orçamento Sem Compromisso - Mais de 50 anos de Experiência no Setor",
-    url: "https://securfix.pt/",
+    title: "Securfix - Vedações Metálicas Preços de Fábrica | Metal Fencing Europe",
+    description: "Fabricantes de Vedações Metálicas, Cercas - Preços Líderes - Entrega em toda a Europa - Mais de 50 anos de Experiência",
+    url: "https://securfix.xdeals.online",
     siteName: "Securfix",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Securfix - Vedações Metálicas Preços de Fábrica",
-    description: "Fabricantes de Vedações Metálicas, Cercas - Preços Líderes - Entrega no Local",
+    description: "Fabricantes de Vedações Metálicas, Cercas - Preços Líderes - Entrega em toda a Europa",
   },
 };
 
@@ -41,7 +49,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-PT" suppressHydrationWarning>
+    <html lang="pt" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
