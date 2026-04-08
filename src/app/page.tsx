@@ -15,47 +15,41 @@ import BlogSection from '@/components/BlogSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
-import CheckoutModal from '@/components/CheckoutModal';
 import OrderTrackingModal from '@/components/OrderTrackingModal';
 import FooterPageModal from '@/components/FooterPageModal';
 import ChatWidget from '@/components/ChatWidget';
 
 function AppContent() {
   const { t } = useI18n();
-  const items = useCartStore((s) => s.items);
   const clearCart = useCartStore((s) => s.clearCart);
-  const closeCart = useCartStore((s) => s.closeCart);
 
-  const totalPrice = useCartStore((s) => s.totalPrice());
-  const shippingCost = useCartStore((s) => s.shippingCost());
-  const grandTotal = useCartStore((s) => s.grandTotal());
-
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
-  const [checkoutKey, setCheckoutKey] = useState(0);
   const [trackingOpen, setTrackingOpen] = useState(false);
   const [footerPageOpen, setFooterPageOpen] = useState(false);
   const [footerPageKey, setFooterPageKey] = useState('');
   const [footerPageTitle, setFooterPageTitle] = useState('');
   const [lastOrderId, setLastOrderId] = useState<string | null>(null);
 
-  const handleCheckout = useCallback(() => {
-    closeCart();
-    setCheckoutKey((k) => k + 1);
-    setCheckoutOpen(true);
-  }, [closeCart]);
+  // ── When Express Checkout starts, save order ID & clear cart ───────────────
+  const handlePaymentRedirect = useCallback((orderId: string) => {
+    setLastOrderId(orderId);
+    // Don't clear cart yet — user might come back if payment fails
+    // Cart will be cleared on payment success (via webhook or redirect param)
+  }, []);
 
-  const handleExpressCheckout = useCallback(() => {
-    closeCart();
-    setCheckoutKey((k) => k + 1);
-    setCheckoutOpen(true);
-  }, [closeCart]);
-
-  const handlePaymentSuccess = useCallback((orderId?: string) => {
-    setCheckoutOpen(false);
-    if (orderId) setLastOrderId(orderId);
-    clearCart();
-    setTrackingOpen(true);
-  }, [clearCart]);
+  // ── Handle payment=success query param on page load ────────────────────────
+  useState(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('payment') === 'success') {
+      // Payment was successful — clear cart and show tracking
+      clearCart();
+      const txId = params.get('tx') || '';
+      if (txId) setLastOrderId(txId);
+      setTrackingOpen(true);
+      // Clean URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  });
 
   const handleOpenFooterPage = useCallback((pageKey: string, title: string) => {
     setFooterPageKey(pageKey);
@@ -83,15 +77,7 @@ function AppContent() {
       <Footer onOpenPage={handleOpenFooterPage} />
 
       {/* ── Overlays ── */}
-      <CartDrawer onCheckout={handleCheckout} onExpressCheckout={handleExpressCheckout} />
-      <CheckoutModal
-        key={checkoutKey}
-        isOpen={checkoutOpen}
-        onClose={() => setCheckoutOpen(false)}
-        items={items.map(i => ({ name: i.name, quantity: i.quantity, price: i.salePrice }))}
-        totalAmount={grandTotal}
-        onPaymentSuccess={handlePaymentSuccess}
-      />
+      <CartDrawer onPaymentRedirect={handlePaymentRedirect} />
       <OrderTrackingModal
         isOpen={trackingOpen}
         onClose={() => setTrackingOpen(false)}

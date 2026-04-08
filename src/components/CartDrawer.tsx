@@ -1,19 +1,26 @@
 'use client';
 
 import Image from 'next/image';
-import { Package, X, Minus, Plus, ArrowLeft, ShoppingBag, Truck, Gift } from 'lucide-react';
+import { Package, X, Minus, Plus, ArrowLeft, ShoppingBag, Truck, Gift, Loader2 } from 'lucide-react';
 import { useCartStore, getMissingForFreeShipping } from '@/lib/cart-store';
 import { useI18n } from '@/lib/i18n-context';
 import { VisaIconCompact, MastercardIconCompact } from '@/components/PaymentIcons';
+import { useState, useRef, useCallback } from 'react';
 
 interface CartDrawerProps {
-  onCheckout?: () => void;
-  onExpressCheckout?: () => void;
+  onPaymentRedirect?: (orderId: string) => void;
 }
 
-export default function CartDrawer({ onCheckout, onExpressCheckout }: CartDrawerProps) {
+function generateOrderId(): string {
+  return `SEC-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 99999)).padStart(5, '0')}`;
+}
+
+export default function CartDrawer({ onPaymentRedirect }: CartDrawerProps) {
   const { items, isOpen, closeCart, removeItem, updateQuantity, totalItems, totalPrice, shippingCost, grandTotal } = useCartStore();
   const { t, formatCurrency } = useI18n();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  const processingRef = useRef(false);
 
   const subtotal = totalPrice();
   const shipping = shippingCost();
@@ -22,6 +29,47 @@ export default function CartDrawer({ onCheckout, onExpressCheckout }: CartDrawer
   const missing = getMissingForFreeShipping(subtotal);
   const hasFreeShipping = missing === 0 && items.length > 0;
 
+  // ── Express Checkout: call API → get shareable_url → REDIRECT ─────────────
+  const handleExpressCheckout = useCallback(async () => {
+    if (processingRef.current || items.length === 0) return;
+    processingRef.current = true;
+    setIsProcessing(true);
+    setErrorMsg('');
+
+    const orderId = generateOrderId();
+
+    try {
+      const res = await fetch('/api/payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: total,
+          currency: 'EUR',
+          items: items.map(i => ({ name: i.name, quantity: i.quantity, price: i.salePrice })),
+          orderId,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.shareable_url) {
+        // Notify parent so it can save the order ID
+        onPaymentRedirect?.(orderId);
+
+        // REDIRECT user to NeXFlowX secure checkout
+        window.location.href = data.shareable_url;
+      } else {
+        setErrorMsg(data.error || t('checkout.error'));
+        processingRef.current = false;
+        setIsProcessing(false);
+      }
+    } catch {
+      setErrorMsg(t('general.error'));
+      processingRef.current = false;
+      setIsProcessing(false);
+    }
+  }, [items, total, t, onPaymentRedirect]);
+
   if (!isOpen) return null;
 
   return (
@@ -29,7 +77,7 @@ export default function CartDrawer({ onCheckout, onExpressCheckout }: CartDrawer
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/50 transition-opacity duration-300"
-        onClick={closeCart}
+        onClick={!isProcessing ? closeCart : undefined}
         aria-hidden="true"
       />
 
@@ -53,7 +101,8 @@ export default function CartDrawer({ onCheckout, onExpressCheckout }: CartDrawer
           <div className="flex items-center gap-1">
             <button
               onClick={closeCart}
-              className="flex items-center gap-1 rounded-md px-2 py-1.5 text-sm text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+              disabled={isProcessing}
+              className="flex items-center gap-1 rounded-md px-2 py-1.5 text-sm text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
               aria-label={t('cart.continue_shopping')}
             >
               <ArrowLeft className="h-4 w-4" />
@@ -61,7 +110,8 @@ export default function CartDrawer({ onCheckout, onExpressCheckout }: CartDrawer
             </button>
             <button
               onClick={closeCart}
-              className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+              disabled={isProcessing}
+              className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 disabled:opacity-50"
               aria-label={t('general.close')}
             >
               <X className="h-5 w-5" />
@@ -188,7 +238,7 @@ export default function CartDrawer({ onCheckout, onExpressCheckout }: CartDrawer
               </div>
             </div>
 
-            {/* Footer with totals */}
+            {/* Footer with totals + Express Checkout button */}
             <div className="border-t border-gray-200 bg-gray-50 px-4 py-3 sm:px-6 sm:py-4 shrink-0">
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between text-sm">
@@ -211,24 +261,38 @@ export default function CartDrawer({ onCheckout, onExpressCheckout }: CartDrawer
                 </div>
               </div>
 
-              <div className="mt-3 sm:mt-4 space-y-2">
+              {/* Error message */}
+              {errorMsg && (
+                <div className="mt-2 rounded-lg bg-red-50 border border-red-200 px-3 py-2">
+                  <p className="text-xs text-red-700">{errorMsg}</p>
+                </div>
+              )}
+
+              {/* Express Checkout — ONLY button */}
+              <div className="mt-3 sm:mt-4">
                 <button
-                  onClick={onCheckout}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-black px-4 py-2.5 sm:py-3 text-sm font-bold text-white transition-colors hover:bg-gray-800"
+                  onClick={handleExpressCheckout}
+                  disabled={isProcessing || items.length === 0}
+                  className="flex w-full items-center justify-center gap-2.5 rounded-lg bg-[#ea6663] px-4 py-2.5 sm:py-3 text-sm font-bold text-white transition-colors hover:bg-[#d94f4c] disabled:opacity-60 disabled:cursor-not-allowed min-h-[44px]"
                 >
-                  <ShoppingBag className="h-4 w-4" />
-                  {t('cart.checkout')}
+                  {isProcessing ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      {t('checkout.processing')}
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-center gap-1">
+                        <VisaIconCompact className="h-5 w-auto" />
+                        <MastercardIconCompact className="h-5 w-auto" />
+                      </div>
+                      {t('cart.express_checkout')}
+                    </>
+                  )}
                 </button>
-                <button
-                  onClick={onExpressCheckout}
-                  className="flex w-full items-center justify-center gap-2.5 rounded-lg bg-[#ea6663] px-4 py-2.5 sm:py-3 text-sm font-bold text-white transition-colors hover:bg-[#d94f4c]"
-                >
-                  <div className="flex items-center gap-1">
-                    <VisaIconCompact className="h-5 w-auto" />
-                    <MastercardIconCompact className="h-5 w-auto" />
-                  </div>
-                  {t('cart.express_checkout')}
-                </button>
+                <p className="mt-2 text-center text-[10px] sm:text-xs text-gray-400">
+                  Pagamento seguro processado por NeXFlowX
+                </p>
               </div>
             </div>
           </>

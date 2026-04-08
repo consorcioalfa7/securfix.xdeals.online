@@ -4,34 +4,33 @@ import { createOrder, getOrder, updateOrderStatus } from '@/lib/orders-store';
 
 // ─── NeXFlowX Webhook Handler ───────────────────────────────────────────────
 // POST /api/webhooks/nexflowx
-// Receives automatic payment confirmation events from NeXFlowX.
+// Receives automatic payment confirmation from NeXFlowX after customer pays.
 //
-// Security: HMAC SHA256 signature validation using NEXFLOWX_WEBHOOK_SECRET.
-// The signature is sent in the header: x-nexflowx-signature
-// It is computed as: HMAC-SHA256(raw_body, NEXFLOWX_WEBHOOK_SECRET)
+// Security: HMAC SHA256 signature validation.
+// Header: x-nexflowx-signature
+// Computed: HMAC-SHA256(req.body as string, NEXFLOWX_WEBHOOK_SECRET)
 //
-// Supported events:
-//   - payment.gateway_confirmed → Marks order as "ready" (payment confirmed)
+// Expected payload:
+// {
+//   "event": "payment.gateway_confirmed",
+//   "transaction_id": "cltx...",
+//   "amount": 99.90,
+//   "currency": "EUR",
+//   "customer_details": {
+//     "order_id": "SEC-2026-10045"
+//   }
+// }
 
-/**
- * Verify the HMAC SHA256 signature from NeXFlowX webhook.
- * @param payload - Raw request body string
- * @param signature - Value from x-nexflowx-signature header
- * @param secret - NEXFLOWX_WEBHOOK_SECRET
- * @returns true if signature matches, false otherwise
- */
 function verifySignature(payload: string, signature: string, secret: string): boolean {
   const expectedSignature = createHmac('sha256', secret)
     .update(payload, 'utf8')
     .digest('hex');
-  // Use timing-safe comparison to prevent timing attacks
   try {
     const expectedBuf = Buffer.from(expectedSignature, 'hex');
     const receivedBuf = Buffer.from(signature, 'hex');
     if (expectedBuf.length !== receivedBuf.length) return false;
     return timingSafeEqual(expectedBuf, receivedBuf);
   } catch {
-    // Fallback: direct comparison (shouldn't happen in Node 16+)
     return expectedSignature === signature;
   }
 }
@@ -43,34 +42,34 @@ export async function POST(request: NextRequest) {
     const signature = request.headers.get('x-nexflowx-signature') || '';
 
     // ── 2. Get webhook secret ────────────────────────────────────────────────
-    // Support both NEXFLOWX_WEBHOOK_SECRET (new) and WEBHOOK_SECRET (legacy)
     const webhookSecret =
       process.env.NEXFLOWX_WEBHOOK_SECRET ||
       process.env.WEBHOOK_SECRET ||
       '';
 
-    // ── 3. Validate signature if secret is configured ────────────────────────
-    if (webhookSecret) {
-      if (!signature) {
-        console.error('[Webhook] Missing x-nexflowx-signature header');
-        return NextResponse.json(
-          { error: 'Missing signature header' },
-          { status: 401 }
-        );
-      }
+    // ── 3. Validate signature ────────────────────────────────────────────────
+    if (!webhookSecret) {
+      console.error('[Webhook] NEXFLOWX_WEBHOOK_SECRET is not configured');
+      return NextResponse.json(
+        { error: 'Webhook secret not configured' },
+        { status: 500 }
+      );
+    }
 
-      if (!verifySignature(rawBody, signature, webhookSecret)) {
-        console.error('[Webhook] Invalid signature - possible tampering detected');
-        return NextResponse.json(
-          { error: 'Invalid signature' },
-          { status: 401 }
-        );
-      }
-    } else {
-      // Log warning in development if no secret configured
-      if (process.env.NODE_ENV !== 'production') {
-        console.warn('[Webhook] No NEXFLOWX_WEBHOOK_SECRET configured — skipping signature validation');
-      }
+    if (!signature) {
+      console.error('[Webhook] Missing x-nexflowx-signature header');
+      return NextResponse.json(
+        { error: 'Missing signature header' },
+        { status: 401 }
+      );
+    }
+
+    if (!verifySignature(rawBody, signature, webhookSecret)) {
+      console.error('[Webhook] Invalid signature — possible tampering');
+      return NextResponse.json(
+        { error: 'Invalid signature' },
+        { status: 401 }
+      );
     }
 
     // ── 4. Parse event payload ───────────────────────────────────────────────
@@ -84,41 +83,43 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const eventType = event.type || event.event_type;
+    const eventType = event.event || event.type || event.event_type;
     console.log(`[Webhook] Received event: ${eventType || 'unknown'}`);
 
-    // ── 5. Process payment confirmation events ───────────────────────────────
+    // ── 5. Process payment.gateway_confirmed ─────────────────────────────────
     if (eventType === 'payment.gateway_confirmed' || eventType === 'payment_confirmed') {
+      // Read order_id from customer_details (which mirrors our metadata)
+      const customerDetails = (event.customer_details as Record<string, unknown>) || {};
       const metadata = (event.metadata as Record<string, unknown>) || {};
+
       const orderId =
+        (customerDetails.order_id as string) ||
         (metadata.order_id as string) ||
-        (metadata.orderId as string) ||
         (event.order_id as string) ||
-        (event.orderId as string) ||
         '';
 
       if (!orderId) {
-        console.error('[Webhook] No order_id in event payload');
+        console.error('[Webhook] No order_id found in payload', JSON.stringify(event));
         return NextResponse.json(
           { error: 'Missing order_id' },
           { status: 400 }
         );
       }
 
-      // Extract transaction details
-      const txId = (event.id as string) || (event.transaction_id as string) || (event.tx_id as string) || '';
+      // Extract transaction details from webhook payload
+      const txId = (event.transaction_id as string) || (event.id as string) || '';
       const amount = Number(event.amount || 0);
       const currency = (event.currency as string) || 'EUR';
-      const items = (metadata.items as { name: string; quantity: number; price: number }[]) || [];
-      const customerEmail = (metadata.customer_email as string) || (metadata.customerEmail as string) || '';
+
+      console.log(`[Webhook] Payment confirmed: order=${orderId}, tx=${txId}, amount=${amount}${currency}`);
 
       // Check if order already exists in our system
       const existing = getOrder(orderId);
 
       if (existing) {
-        // Update existing order status to "ready"
+        // Update existing order status to "ready" (payment confirmed)
         updateOrderStatus(orderId, 'ready', 'Payment confirmed by NeXFlowX gateway');
-        console.log(`[Webhook] Order ${orderId} status updated to 'ready'`);
+        console.log(`[Webhook] Order ${orderId} updated → status: ready`);
         return NextResponse.json({ received: true, orderId, updated: true });
       }
 
@@ -127,14 +128,14 @@ export async function POST(request: NextRequest) {
         txId,
         amount,
         currency,
-        items,
-        customerEmail,
+        items: (metadata.items as { name: string; quantity: number; price: number }[]) || [],
+        customerEmail: (customerDetails.customer_email as string) || (metadata.customer_email as string) || '',
       });
-      console.log(`[Webhook] New order created: ${order.id} (original: ${orderId})`);
+      console.log(`[Webhook] New order created: ${order.id} (tx: ${txId})`);
       return NextResponse.json({ received: true, orderId: order.id, created: true });
     }
 
-    // ── 6. Acknowledge other event types ─────────────────────────────────────
+    // ── 6. Acknowledge other events ──────────────────────────────────────────
     console.log(`[Webhook] Acknowledged event: ${eventType}`);
     return NextResponse.json({ received: true, event: eventType });
 
@@ -147,11 +148,12 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// ── Health check for webhook endpoint ────────────────────────────────────────
+// ── Health check ──────────────────────────────────────────────────────────────
 export async function GET() {
+  const hasSecret = !!(process.env.NEXFLOWX_WEBHOOK_SECRET || process.env.WEBHOOK_SECRET);
   return NextResponse.json({
     status: 'ok',
     service: 'NeXFlowX Webhook Handler',
-    version: '1.0.0',
+    signature_validation: hasSecret ? 'enabled' : 'disabled',
   });
 }

@@ -2,15 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 
 // ─── NeXFlowX Payment Link Creation ─────────────────────────────────────────
 // POST /api/payment
-// When the client clicks "Finalizar Compra", the backend creates a NeXFlowX
-// payment link and returns the shareable_url for iframe checkout.
+// Server-to-Server call to NeXFlowX API to generate a payment link.
+// Frontend receives the shareable_url and REDIRECTS the user to it.
 
 const NEXFLOWX_API_URL = 'https://api.nexflowx.tech/api/v1/payment-links';
 
 interface PaymentRequestBody {
   amount: number;
   currency?: string;
-  customer_email?: string;
+  customer_name?: string;
   items?: { name: string; quantity: number; price: number }[];
   orderId?: string;
 }
@@ -18,14 +18,14 @@ interface PaymentRequestBody {
 export async function POST(request: NextRequest) {
   try {
     const body: PaymentRequestBody = await request.json();
-    const { amount, currency, customer_email, items, orderId } = body;
+    const { amount, currency, customer_name, items, orderId } = body;
 
     // ── 1. Validate API Key ──────────────────────────────────────────────────
     const apiKey = process.env.NEXFLOWX_API_KEY;
     if (!apiKey) {
       console.error('[NeXFlowX] NEXFLOWX_API_KEY is not configured');
       return NextResponse.json(
-        { error: 'Payment service is not configured. Please set NEXFLOWX_API_KEY environment variable.' },
+        { error: 'Payment service is not configured. Please set NEXFLOWX_API_KEY.' },
         { status: 503 }
       );
     }
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     // ── 3. Build redirect URL for post-payment ───────────────────────────────
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
     const redirectUrl = baseUrl
-      ? `${baseUrl}/encomenda-sucesso`
+      ? `${baseUrl}?payment=success`
       : undefined;
 
     // ── 4. Generate internal order ID if not provided ────────────────────────
@@ -50,8 +50,7 @@ export async function POST(request: NextRequest) {
 
     // ── 5. Call NeXFlowX API ─────────────────────────────────────────────────
     // POST https://api.nexflowx.tech/api/v1/payment-links
-    // Headers: Content-Type: application/json, x-api-key: <API_KEY>
-    // Body: { amount, currency, store_name, metadata }
+    // Headers: Content-Type: application/json, x-api-key: {NEXFLOWX_API_KEY}
     const response = await fetch(NEXFLOWX_API_URL, {
       method: 'POST',
       headers: {
@@ -59,13 +58,14 @@ export async function POST(request: NextRequest) {
         'x-api-key': apiKey,
       },
       body: JSON.stringify({
-        amount: Math.round(numAmount * 100) / 100, // Ensure 2 decimal places
+        amount: Math.round(numAmount * 100) / 100,
         currency: currency || 'EUR',
-        store_name: 'Securfix', // OBRIGATÓRIO: Branding no checkout
+        store_name: 'Securfix',
+        provider_name: 'stripe',
         redirect_url: redirectUrl,
         metadata: {
           order_id: internalOrderId,
-          customer_email: customer_email || '',
+          customer_name: customer_name || '',
           items: items || [],
           source: 'securfix-xdeals-online',
         },
@@ -83,19 +83,14 @@ export async function POST(request: NextRequest) {
     }
 
     // ── 7. Parse Response ────────────────────────────────────────────────────
+    // Expected: { data: { id: "cltx...", shareable_url: "https://checkout.nexflowx.tech/?txId=..." } }
     const data = await response.json();
 
-    // NeXFlowX may return the URL at different paths:
-    // - { data: { shareable_url: "..." } }
-    // - { shareable_url: "..." }
-    // - { url: "..." }
-    // - { checkout_url: "..." }
     const shareableUrl =
-      (data.data?.shareable_url) ||
+      data.data?.shareable_url ||
       data.shareable_url ||
       data.url ||
-      data.checkout_url ||
-      data.data?.url;
+      data.checkout_url;
 
     if (!shareableUrl) {
       console.error('[NeXFlowX] Response missing shareable_url:', JSON.stringify(data));
@@ -105,7 +100,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // ── 8. Return to Frontend ────────────────────────────────────────────────
+    // ── 8. Return shareable_url to frontend ──────────────────────────────────
     return NextResponse.json({
       shareable_url: shareableUrl,
       id: data.id || data.data?.id,
