@@ -336,7 +336,7 @@ const translations: Record<Locale, Record<string, string>> = {
 
     // Chat
     'chat.title': 'Assistente Securfix',
-    'chat.welcome': 'Olá! Sou o assistente virtual da Securfix. Posso ajudá-lo a encontrar o produto ideal para o seu projeto. Como posso ajudar?',
+    'chat.welcome': 'Olá! Sou o assistente virtual da Securfix 🏠 Posso ajudá-lo a encontrar o produto ideal para o seu projeto. Temos 84 produtos com preços de fábrica! Diga-me o que procura — vedações, portas, portões, grades, arames... Estou aqui para ajudá-lo a escolher e comprar!',
     'chat.placeholder': 'Escreva a sua mensagem...',
     'chat.send': 'Enviar',
 
@@ -617,7 +617,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'tracking.far_europe': 'Países lejanos: hasta 15 días hábiles',
     // Chat
     'chat.title': 'Asistente Securfix',
-    'chat.welcome': '¡Hola! Soy el asistente virtual de Securfix. Puedo ayudarle a encontrar el producto ideal para su proyecto. ¿Cómo puedo ayudarle?',
+    'chat.welcome': '¡Hola! Soy el asistente virtual de Securfix 🏠 Puedo ayudarle a encontrar el producto ideal para su proyecto. Tenemos 84 productos con precios de fábrica. ¡Dígame qué busca — vallados, puertas, portones, rejas, alambres... Estoy aquí para ayudarle a elegir y comprar!',
     'chat.placeholder': 'Escriba su mensaje...',
     'chat.send': 'Enviar',
     // General
@@ -880,7 +880,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'tracking.other_europe': 'Other European countries: up to 7 business days',
     'tracking.far_europe': 'Distant countries: up to 15 business days',
     'chat.title': 'Securfix Assistant',
-    'chat.welcome': 'Hello! I\'m the Securfix virtual assistant. I can help you find the ideal product for your project. How can I help you?',
+    'chat.welcome': 'Hello! I\'m the Securfix virtual assistant 🏠 I can help you find the perfect product for your project. We have 84 products at factory prices! Tell me what you need — fencing, doors, gates, railings, wire... I\'m here to help you choose and buy!',
     'chat.placeholder': 'Type your message...',
     'chat.send': 'Send',
     'general.loading': 'Loading...',
@@ -1142,7 +1142,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'tracking.other_europe': 'Autres pays d\'Europe : jusqu\'à 7 jours ouvrés',
     'tracking.far_europe': 'Pays éloignés : jusqu\'à 15 jours ouvrés',
     'chat.title': 'Assistant Securfix',
-    'chat.welcome': 'Bonjour ! Je suis l\'assistant virtuel de Securfix. Je peux vous aider à trouver le produit idéal pour votre projet. Comment puis-je vous aider ?',
+    'chat.welcome': 'Bonjour ! Je suis l\'assistant virtuel Securfix 🏠 Je peux vous aider à trouver le produit idéal pour votre projet. Nous avons 84 produits à prix usine ! Dites-moi ce que vous cherchez — clôtures, portes, portails, rampes, fils... Je suis là pour vous aider à choisir et acheter !',
     'chat.placeholder': 'Tapez votre message...',
     'chat.send': 'Envoyer',
     'general.loading': 'Chargement...',
@@ -1404,7 +1404,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'tracking.other_europe': 'Andere europäische Länder: bis zu 7 Werktage',
     'tracking.far_europe': 'Entferntere Länder: bis zu 15 Werktage',
     'chat.title': 'Securfix-Assistent',
-    'chat.welcome': 'Hallo! Ich bin der virtuelle Assistent von Securfix. Ich kann Ihnen helfen, das ideale Produkt für Ihr Projekt zu finden. Wie kann ich Ihnen helfen?',
+    'chat.welcome': 'Hallo! Ich bin der virtuelle Securfix-Assistent 🏠 Ich kann Ihnen helfen, das perfekte Produkt für Ihr Projekt zu finden. Wir haben 84 Produkte zu Fabrikpreisen! Sagen Sie mir, was Sie suchen — Zäune, Türen, Tore, Geländer, Draht... Ich helfe Ihnen beim Auswählen und Kaufen!',
     'chat.placeholder': 'Nachricht eingeben...',
     'chat.send': 'Senden',
     'general.loading': 'Laden...',
@@ -1666,7 +1666,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'tracking.other_europe': 'Andere Europese landen: tot 7 werkdagen',
     'tracking.far_europe': 'Ver landen: tot 15 werkdagen',
     'chat.title': 'Securfix Assistent',
-    'chat.welcome': 'Hallo! Ik ben de virtuele assistent van Securfix. Ik kan u helpen het ideale product voor uw project te vinden. Hoe kan ik u helpen?',
+    'chat.welcome': 'Hallo! Ik ben de virtuele Securfix-assistent 🏠 Ik kan u helpen het perfecte product voor uw project te vinden. Wij hebben 84 producten tegen fabrieksprijzen! Vertel me wat u zoekt — hekken, deuren, poorten, leuningen, draad... Ik help u graag met kiezen en kopen!',
     'chat.placeholder': 'Typ uw bericht...',
     'chat.send': 'Verzenden',
     'general.loading': 'Laden...',
@@ -1928,7 +1928,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'tracking.other_europe': 'Altri paesi europei: fino a 7 giorni lavorativi',
     'tracking.far_europe': 'Paesi lontani: fino a 15 giorni lavorativi',
     'chat.title': 'Assistente Securfix',
-    'chat.welcome': 'Ciao! Sono l\'assistente virtuale di Securfix. Posso aiutarti a trovare il prodotto ideale per il tuo progetto. Come posso aiutarti?',
+    'chat.welcome': 'Ciao! Sono l\'assistente virtuale Securfix 🏠 Posso aiutarti a trovare il prodotto perfetto per il tuo progetto. Abbiamo 84 prodotti a prezzi di fabbrica! Dimmi cosa cerchi — recinzioni, porte, cancelli, ringhiere, fili... Sono qui per aiutarti a scegliere e acquistare!',
     'chat.placeholder': 'Scrivi il tuo messaggio...',
     'chat.send': 'Invia',
     'general.loading': 'Caricamento...',

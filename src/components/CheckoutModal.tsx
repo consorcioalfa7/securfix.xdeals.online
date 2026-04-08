@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Loader2, CheckCircle2, XCircle, Package, ArrowLeft, ShoppingBag } from 'lucide-react';
 import { useI18n } from '@/lib/i18n-context';
 
@@ -20,32 +20,22 @@ interface CheckoutModalProps {
 
 type CheckoutState = 'idle' | 'checkout' | 'success' | 'error';
 
+function generateOrderId(): string {
+  return `SF-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 99999)).padStart(5, '0')}`;
+}
+
 export default function CheckoutModal({ isOpen, onClose, items, totalAmount, onPaymentSuccess }: CheckoutModalProps) {
   const { t } = useI18n();
   const [checkoutUrl, setCheckoutUrl] = useState<string>('');
   const [state, setState] = useState<CheckoutState>('idle');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const paymentInitiatedRef = useRef(false);
+  // Stable order ID for this checkout session (component remounts via key)
+  const [currentOrderId] = useState(generateOrderId);
 
-  // Compute a stable order ID (generated per session)
-  const currentOrderId = useMemo(() => {
-    return `SF-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 99999)).padStart(5, '0')}`;
-  }, [isOpen]);
-
-  // Reset state when modal closes
+  // Initiate payment on mount (since component remounts via key pattern)
   useEffect(() => {
-    if (!isOpen) {
-      setCheckoutUrl('');
-      setState('idle');
-      setErrorMessage('');
-      paymentInitiatedRef.current = false;
-    }
-  }, [isOpen]);
-
-  // Initiate payment when modal opens (async setState only in callbacks)
-  useEffect(() => {
-    if (!isOpen || checkoutUrl || state === 'checkout') return;
-
+    if (!isOpen) return;
     if (paymentInitiatedRef.current) return;
     paymentInitiatedRef.current = true;
 
@@ -75,8 +65,9 @@ export default function CheckoutModal({ isOpen, onClose, items, totalAmount, onP
     };
 
     createPayment();
-  }, [isOpen, checkoutUrl, state, currentOrderId]);
+  }, [isOpen, totalAmount, items, currentOrderId, t]);
 
+  // Listen for NeXFlowX postMessage
   const handleMessage = useCallback(
     (event: MessageEvent) => {
       if (event.origin === 'https://checkout.nexflowx.tech') {
@@ -103,7 +94,6 @@ export default function CheckoutModal({ isOpen, onClose, items, totalAmount, onP
     }
   }, [checkoutUrl, handleMessage]);
 
-  // Determine effective state for rendering
   const isLoading = !checkoutUrl && state !== 'error' && state !== 'success';
   const isCheckout = !!checkoutUrl && state !== 'error' && state !== 'success';
 

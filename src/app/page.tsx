@@ -23,11 +23,13 @@ import ChatWidget from '@/components/ChatWidget';
 function AppContent() {
   const { t } = useI18n();
   const items = useCartStore((s) => s.items);
-  const totalPrice = useCartStore((s) => s.totalPrice());
   const clearCart = useCartStore((s) => s.clearCart);
   const closeCart = useCartStore((s) => s.closeCart);
 
+  const totalPrice = items.reduce((sum, i) => sum + i.salePrice * i.quantity, 0);
+
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [checkoutKey, setCheckoutKey] = useState(0);
   const [trackingOpen, setTrackingOpen] = useState(false);
   const [footerPageOpen, setFooterPageOpen] = useState(false);
   const [footerPageKey, setFooterPageKey] = useState('');
@@ -36,11 +38,13 @@ function AppContent() {
 
   const handleCheckout = useCallback(() => {
     closeCart();
+    setCheckoutKey((k) => k + 1);
     setCheckoutOpen(true);
   }, [closeCart]);
 
   const handleExpressCheckout = useCallback(() => {
     closeCart();
+    setCheckoutKey((k) => k + 1);
     setCheckoutOpen(true);
   }, [closeCart]);
 
@@ -79,6 +83,7 @@ function AppContent() {
       {/* ── Overlays ── */}
       <CartDrawer onCheckout={handleCheckout} onExpressCheckout={handleExpressCheckout} />
       <CheckoutModal
+        key={checkoutKey}
         isOpen={checkoutOpen}
         onClose={() => setCheckoutOpen(false)}
         items={items.map(i => ({ name: i.name, quantity: i.quantity, price: i.salePrice }))}
