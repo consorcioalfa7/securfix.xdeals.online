@@ -1,15 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Check } from 'lucide-react';
 import Image from 'next/image';
 import { getProductImage } from '@/lib/images';
+import { useCartStore } from '@/lib/cart-store';
 
 interface Product {
+  id: number;
   name: string;
   originalPrice: number;
   salePrice: number;
+  category: string;
 }
 
 interface Tab {
@@ -23,28 +26,28 @@ const tabs: Tab[] = [
     id: 'vedacoes',
     label: 'Vedações Metálicas',
     products: [
-      { name: 'Painel de Vedação Cinza', originalPrice: 25.5, salePrice: 15.25 },
-      { name: 'Rede Eletrossoldada Galvanizada', originalPrice: 25.0, salePrice: 14.85 },
-      { name: 'Grade de Ferro Maciço Quadrado 1,00 x 2,25 m', originalPrice: 203.0, salePrice: 122.0 },
-      { name: 'Gradil Tramex', originalPrice: 26.5, salePrice: 15.9 },
-      { name: 'Portão de Vedação Cinza Premium', originalPrice: 287.0, salePrice: 172.8 },
-      { name: 'Poste Malha Hercules Verde', originalPrice: 11.0, salePrice: 6.45 },
-      { name: 'Rolo de Arame Farpado Verde', originalPrice: 101.0, salePrice: 60.75 },
-      { name: 'Rolo de Rede Ovelheira com Nó', originalPrice: 63.0, salePrice: 37.9 },
+      { id: 101, name: 'Painel de Vedação Cinza', originalPrice: 25.5, salePrice: 15.25, category: 'vedacoes' },
+      { id: 102, name: 'Rede Eletrossoldada Galvanizada', originalPrice: 25.0, salePrice: 14.85, category: 'vedacoes' },
+      { id: 103, name: 'Grade de Ferro Maciço Quadrado 1,00 x 2,25 m', originalPrice: 203.0, salePrice: 122.0, category: 'vedacoes' },
+      { id: 104, name: 'Gradil Tramex', originalPrice: 26.5, salePrice: 15.9, category: 'vedacoes' },
+      { id: 105, name: 'Portão de Vedação Cinza Premium', originalPrice: 287.0, salePrice: 172.8, category: 'vedacoes' },
+      { id: 106, name: 'Poste Malha Hercules Verde', originalPrice: 11.0, salePrice: 6.45, category: 'vedacoes' },
+      { id: 107, name: 'Rolo de Arame Farpado Verde', originalPrice: 101.0, salePrice: 60.75, category: 'vedacoes' },
+      { id: 108, name: 'Rolo de Rede Ovelheira com Nó', originalPrice: 63.0, salePrice: 37.9, category: 'vedacoes' },
     ],
   },
   {
     id: 'portas',
     label: 'Portas',
     products: [
-      { name: 'Porta Corta-Fogo P60 (EI 60) C5 1 Folha', originalPrice: 317.0, salePrice: 190.95 },
-      { name: 'Porta de Segurança Grau 3 Cearco Standard', originalPrice: 594.99, salePrice: 475.99 },
-      { name: 'Portão de Vedação Cinza Premium', originalPrice: 287.0, salePrice: 172.8 },
-      { name: 'Porta Multiuso Branca', originalPrice: 182.5, salePrice: 109.8 },
-      { name: 'Porta de Segurança Triana B4 Grau 3', originalPrice: 876.99, salePrice: 701.99 },
-      { name: 'Estrutura Porta de Correr Orchidea Basic', originalPrice: 412.0, salePrice: 248.05 },
-      { name: 'Porta Corta-Fogo P90 (EI 90) C5 1 Folha', originalPrice: 542.5, salePrice: 326.55 },
-      { name: 'Porta Corta-Fogo P120 (EI 120) C5 1 Folha', originalPrice: 755.5, salePrice: 454.95 },
+      { id: 201, name: 'Porta Corta-Fogo P60 (EI 60) C5 1 Folha', originalPrice: 317.0, salePrice: 190.95, category: 'portas' },
+      { id: 202, name: 'Porta de Segurança Grau 3 Cearco Standard', originalPrice: 594.99, salePrice: 475.99, category: 'portas' },
+      { id: 203, name: 'Portão de Vedação Cinza Premium', originalPrice: 287.0, salePrice: 172.8, category: 'portas' },
+      { id: 204, name: 'Porta Multiuso Branca', originalPrice: 182.5, salePrice: 109.8, category: 'portas' },
+      { id: 205, name: 'Porta de Segurança Triana B4 Grau 3', originalPrice: 876.99, salePrice: 701.99, category: 'portas' },
+      { id: 206, name: 'Estrutura Porta de Correr Orchidea Basic', originalPrice: 412.0, salePrice: 248.05, category: 'portas' },
+      { id: 207, name: 'Porta Corta-Fogo P90 (EI 90) C5 1 Folha', originalPrice: 542.5, salePrice: 326.55, category: 'portas' },
+      { id: 208, name: 'Porta Corta-Fogo P120 (EI 120) C5 1 Folha', originalPrice: 755.5, salePrice: 454.95, category: 'portas' },
     ],
   },
 ];
@@ -60,6 +63,23 @@ function getDiscountPercent(original: number, sale: number): number {
 function ProductCard({ product }: { product: Product }) {
   const discount = getDiscountPercent(product.originalPrice, product.salePrice);
   const productImage = getProductImage(product.name);
+  const addItem = useCartStore((s) => s.addItem);
+  const openCart = useCartStore((s) => s.openCart);
+  const [added, setAdded] = useState(false);
+
+  const handleAdd = useCallback(() => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      originalPrice: product.originalPrice,
+      salePrice: product.salePrice,
+      category: product.category,
+      image: productImage,
+    });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1200);
+    setTimeout(() => openCart(), 400);
+  }, [product, addItem, openCart, productImage]);
 
   return (
     <motion.div
@@ -105,9 +125,16 @@ function ProductCard({ product }: { product: Product }) {
         <p className="text-lg font-bold text-gray-900 mb-3">
           {formatPrice(product.salePrice)} €
         </p>
-        <button className="w-full flex items-center justify-center gap-2 bg-black text-white text-sm font-semibold py-2.5 rounded hover:bg-gray-800 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2">
-          <ShoppingCart className="w-4 h-4" />
-          Adicionar
+        <button
+          onClick={handleAdd}
+          className={`w-full flex items-center justify-center gap-2 text-sm font-semibold py-2.5 rounded transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 ${
+            added
+              ? 'bg-green-600 text-white'
+              : 'bg-black text-white hover:bg-gray-800'
+          }`}
+        >
+          {added ? <Check className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
+          {added ? 'Adicionado!' : 'Adicionar'}
         </button>
       </div>
     </motion.div>

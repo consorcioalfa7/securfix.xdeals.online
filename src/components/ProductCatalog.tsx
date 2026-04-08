@@ -1,14 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import {
   ShoppingCart,
   ChevronDown,
   SlidersHorizontal,
+  Check,
 } from 'lucide-react';
 import { getProductImage } from '@/lib/images';
+import { useCartStore } from '@/lib/cart-store';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -204,6 +206,23 @@ const cardVariants = {
 function ProductCard({ product, index }: { product: Product; index: number }) {
   const onSale = isOnSale(product);
   const categoryLabel = getCategoryLabel(product.category);
+  const addItem = useCartStore((s) => s.addItem);
+  const openCart = useCartStore((s) => s.openCart);
+  const [added, setAdded] = useState(false);
+
+  const handleAdd = useCallback(() => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      originalPrice: product.originalPrice,
+      salePrice: product.salePrice,
+      category: product.category,
+      image: getProductImage(product.name),
+    });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1200);
+    setTimeout(() => openCart(), 400);
+  }, [product, addItem, openCart]);
 
   return (
     <motion.article
@@ -263,11 +282,16 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
           {/* Add button */}
           <button
             type="button"
+            onClick={handleAdd}
             aria-label={`Adicionar ${product.name} ao carrinho`}
-            className="w-full bg-black text-white text-sm font-medium rounded py-2.5 px-4 hover:bg-gray-800 active:bg-gray-900 transition-colors duration-200 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ea6663] focus-visible:ring-offset-2"
+            className={`w-full text-white text-sm font-medium rounded py-2.5 px-4 transition-all duration-300 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ea6663] focus-visible:ring-offset-2 ${
+              added
+                ? 'bg-green-600'
+                : 'bg-black hover:bg-gray-800 active:bg-gray-900'
+            }`}
           >
-            <ShoppingCart className="w-4 h-4" />
-            Adicionar
+            {added ? <Check className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
+            {added ? 'Adicionado!' : 'Adicionar'}
           </button>
         </div>
       </div>
