@@ -26,7 +26,9 @@ function AppContent() {
   const clearCart = useCartStore((s) => s.clearCart);
   const closeCart = useCartStore((s) => s.closeCart);
 
-  const totalPrice = items.reduce((sum, i) => sum + i.salePrice * i.quantity, 0);
+  const totalPrice = useCartStore((s) => s.totalPrice());
+  const shippingCost = useCartStore((s) => s.shippingCost());
+  const grandTotal = useCartStore((s) => s.grandTotal());
 
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [checkoutKey, setCheckoutKey] = useState(0);
@@ -87,7 +89,7 @@ function AppContent() {
         isOpen={checkoutOpen}
         onClose={() => setCheckoutOpen(false)}
         items={items.map(i => ({ name: i.name, quantity: i.quantity, price: i.salePrice }))}
-        totalAmount={totalPrice}
+        totalAmount={grandTotal}
         onPaymentSuccess={handlePaymentSuccess}
       />
       <OrderTrackingModal

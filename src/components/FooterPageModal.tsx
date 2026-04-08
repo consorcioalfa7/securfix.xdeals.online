@@ -292,7 +292,7 @@ const PAGE_CONTENT: Record<string, React.ReactNode> = {
         </p>
 
         <div className="rounded-lg border border-gray-200 overflow-hidden">
-          <div className="grid grid-cols-2 bg-gray-100 px-4 py-2.5 text-xs font-semibold text-gray-600 uppercase">
+          <div className="grid grid-cols-1 sm:grid-cols-2 bg-gray-100 px-4 py-2.5 text-xs font-semibold text-gray-600 uppercase">
             <span>Destino</span>
             <span>Prazo de Entrega</span>
           </div>
@@ -303,7 +303,7 @@ const PAGE_CONTENT: Record<string, React.ReactNode> = {
             ['Resto da Europa', '7-10 dias úteis'],
             ['Países distantes (Escandinávia, etc.)', '10-15 dias úteis'],
           ].map(([dest, time]) => (
-            <div key={dest} className="grid grid-cols-2 border-t border-gray-100 px-4 py-2.5 text-sm">
+            <div key={dest} className="grid grid-cols-1 sm:grid-cols-2 border-t border-gray-100 px-4 py-2.5 text-sm">
               <span className="text-gray-700">{dest}</span>
               <span className="font-medium text-gray-900">{time}</span>
             </div>
@@ -582,7 +582,7 @@ export default function FooterPageModal({ isOpen, onClose, pageKey, title }: Foo
 
       {/* Modal */}
       <div
-        className="relative z-10 w-full max-w-3xl max-h-[85vh] overflow-hidden rounded-2xl bg-white shadow-2xl animate-in fade-in-0 zoom-in-95 duration-200"
+        className="relative z-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white shadow-2xl animate-in fade-in-0 zoom-in-95 duration-200"
         role="dialog"
         aria-modal="true"
         aria-label={title}
@@ -592,7 +592,7 @@ export default function FooterPageModal({ isOpen, onClose, pageKey, title }: Foo
           <h2 className="text-lg font-bold text-gray-900">{title}</h2>
           <button
             onClick={onClose}
-            className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+            className="rounded-md p-2.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
             aria-label="Fechar"
           >
             <XCircle className="h-5 w-5" />
@@ -600,7 +600,7 @@ export default function FooterPageModal({ isOpen, onClose, pageKey, title }: Foo
         </div>
 
         {/* Content */}
-        <div className="overflow-y-auto max-h-[calc(85vh-65px)] px-6 py-6">
+        <div className="px-4 py-4 sm:px-6 sm:py-6">
           {content || (
             <div className="text-center text-gray-400 py-12">
               <p>Página em construção.</p>

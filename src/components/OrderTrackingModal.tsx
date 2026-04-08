@@ -109,7 +109,7 @@ export default function OrderTrackingModal({ isOpen, onClose, initialOrderId }: 
 
       {/* Modal */}
       <div
-        className="relative z-10 w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl animate-in fade-in-0 zoom-in-95 duration-200"
+        className="relative z-10 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-4 sm:p-6 shadow-2xl animate-in fade-in-0 zoom-in-95 duration-200"
         role="dialog"
         aria-modal="true"
         aria-label={t('tracking.title')}
@@ -117,7 +117,7 @@ export default function OrderTrackingModal({ isOpen, onClose, initialOrderId }: 
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 rounded-md p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+          className="absolute top-4 right-4 rounded-md p-2.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
           aria-label={t('general.close')}
         >
           <XCircle className="h-5 w-5" />
@@ -148,7 +148,7 @@ export default function OrderTrackingModal({ isOpen, onClose, initialOrderId }: 
           <button
             onClick={handleSearch}
             disabled={loading || !searchInput.trim()}
-            className="flex items-center gap-2 rounded-lg bg-[#ea6663] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#d94f4c] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 rounded-lg bg-[#ea6663] px-5 py-3 min-h-[44px] text-sm font-bold text-white transition-colors hover:bg-[#d94f4c] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
             <span className="sm:inline">{t('tracking.search')}</span>
@@ -241,17 +241,17 @@ export default function OrderTrackingModal({ isOpen, onClose, initialOrderId }: 
                             </div>
                           )}
                         </div>
-                        <div className="flex-1 pb-6">
+                        <div className="flex-1 min-w-0 pb-6">
                           <div className="flex items-center gap-2">
                             <IconComponent
-                              className={`h-4 w-4 ${
+                              className={`h-4 w-4 flex-shrink-0 ${
                                 STATUS_STEPS.indexOf(status) <= STATUS_STEPS.indexOf(order.status)
                                   ? 'text-[#ea6663]'
                                   : 'text-gray-300'
                               }`}
                             />
                             <p
-                              className={`text-sm font-semibold ${
+                              className={`text-sm font-semibold break-words ${
                                 STATUS_STEPS.indexOf(status) <= STATUS_STEPS.indexOf(order.status)
                                   ? 'text-gray-900'
                                   : 'text-gray-400'

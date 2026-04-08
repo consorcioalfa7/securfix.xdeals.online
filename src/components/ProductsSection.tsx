@@ -127,7 +127,7 @@ function ProductCard({ product }: { product: Product }) {
         </p>
         <button
           onClick={handleAdd}
-          className={`w-full flex items-center justify-center gap-2 text-sm font-semibold py-2.5 rounded transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 ${
+          className={`w-full flex items-center justify-center gap-2 text-sm font-semibold py-3 rounded transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 ${
             added
               ? 'bg-green-600 text-white'
               : 'bg-black text-white hover:bg-gray-800'
@@ -168,7 +168,7 @@ export default function ProductsSection() {
 
         {/* Tabs */}
         <div
-          className="flex justify-center gap-2 mb-10 border-b border-gray-200"
+          className="flex sm:justify-center gap-2 mb-10 border-b border-gray-200 overflow-x-auto scrollbar-thin"
           role="tablist"
           aria-label="Categorias de produtos"
         >
@@ -180,7 +180,7 @@ export default function ProductsSection() {
               aria-controls={`tabpanel-${tab.id}`}
               onClick={() => setActiveTab(tab.id)}
               className={`
-                relative px-5 py-3 text-sm font-semibold tracking-wide uppercase transition-colors duration-200
+                relative px-5 py-3 text-sm font-semibold tracking-wide uppercase transition-colors duration-200 whitespace-nowrap flex-shrink-0
                 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ea6663] focus-visible:ring-offset-2
                 ${
                   activeTab === tab.id

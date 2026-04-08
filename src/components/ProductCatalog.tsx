@@ -284,7 +284,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
             type="button"
             onClick={handleAdd}
             aria-label={`Adicionar ${product.name} ao carrinho`}
-            className={`w-full text-white text-sm font-medium rounded py-2.5 px-4 transition-all duration-300 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ea6663] focus-visible:ring-offset-2 ${
+            className={`w-full text-white text-sm font-medium rounded py-3 px-4 transition-all duration-300 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ea6663] focus-visible:ring-offset-2 ${
               added
                 ? 'bg-green-600'
                 : 'bg-black hover:bg-gray-800 active:bg-gray-900'
@@ -406,7 +406,7 @@ export default function ProductCatalog() {
             <button
               type="button"
               onClick={() => handleCategoryChange('todos')}
-              className="text-sm text-[#ea6663] hover:text-[#d94f4c] font-medium transition-colors focus-visible:outline-none focus-visible:underline"
+              className="text-sm text-[#ea6663] hover:text-[#d94f4c] font-medium transition-colors focus-visible:outline-none focus-visible:underline px-2 py-1 -ml-2 rounded"
             >
               Mostrar todos
             </button>

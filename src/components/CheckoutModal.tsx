@@ -110,7 +110,7 @@ export default function CheckoutModal({ isOpen, onClose, items, totalAmount, onP
 
       {/* Modal */}
       <div
-        className="relative z-10 w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl animate-in fade-in-0 zoom-in-95 duration-200"
+        className="relative z-10 w-full max-w-lg rounded-2xl bg-white p-4 sm:p-6 shadow-2xl animate-in fade-in-0 zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto"
         role="dialog"
         aria-modal="true"
         aria-label={t('checkout.title')}
@@ -118,7 +118,7 @@ export default function CheckoutModal({ isOpen, onClose, items, totalAmount, onP
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 rounded-md p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+          className="absolute top-4 right-4 rounded-md p-2.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
           aria-label={t('checkout.close')}
         >
           <XCircle className="h-5 w-5" />
@@ -144,8 +144,8 @@ export default function CheckoutModal({ isOpen, onClose, items, totalAmount, onP
               src={checkoutUrl}
               style={{
                 width: '100%',
-                maxWidth: '450px',
-                height: '600px',
+                maxWidth: '100%',
+                height: '450px',
                 border: 'none',
                 borderRadius: '12px',
               }}
@@ -170,14 +170,14 @@ export default function CheckoutModal({ isOpen, onClose, items, totalAmount, onP
             <div className="mt-4 flex w-full flex-col gap-2 sm:flex-row">
               <button
                 onClick={() => onPaymentSuccess?.(currentOrderId)}
-                className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#ea6663] px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-[#d94f4c]"
+                className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#ea6663] px-4 py-3.5 min-h-[44px] text-sm font-bold text-white transition-colors hover:bg-[#d94f4c]"
               >
                 <Package className="h-4 w-4" />
                 {t('checkout.track_order')}
               </button>
               <button
                 onClick={onClose}
-                className="flex flex-1 items-center justify-center gap-2 rounded-lg border-2 border-gray-200 px-4 py-3 text-sm font-bold text-gray-700 transition-colors hover:bg-gray-50"
+                className="flex flex-1 items-center justify-center gap-2 rounded-lg border-2 border-gray-200 px-4 py-3.5 min-h-[44px] text-sm font-bold text-gray-700 transition-colors hover:bg-gray-50"
               >
                 <ArrowLeft className="h-4 w-4" />
                 {t('checkout.continue')}
@@ -202,13 +202,13 @@ export default function CheckoutModal({ isOpen, onClose, items, totalAmount, onP
                   setState('idle');
                   paymentInitiatedRef.current = false;
                 }}
-                className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#ea6663] px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-[#d94f4c]"
+                className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#ea6663] px-4 py-3.5 min-h-[44px] text-sm font-bold text-white transition-colors hover:bg-[#d94f4c]"
               >
                 {t('checkout.retry')}
               </button>
               <button
                 onClick={onClose}
-                className="flex flex-1 items-center justify-center gap-2 rounded-lg border-2 border-gray-200 px-4 py-3 text-sm font-bold text-gray-700 transition-colors hover:bg-gray-50"
+                className="flex flex-1 items-center justify-center gap-2 rounded-lg border-2 border-gray-200 px-4 py-3.5 min-h-[44px] text-sm font-bold text-gray-700 transition-colors hover:bg-gray-50"
               >
                 <ArrowLeft className="h-4 w-4" />
                 {t('checkout.continue')}

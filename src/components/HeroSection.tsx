@@ -116,7 +116,7 @@ export default function HeroSection() {
             {slide.subtitle}
           </p>
           <button
-            className="inline-flex items-center gap-2 px-8 py-3 bg-white text-black font-semibold text-sm tracking-wider uppercase rounded-sm hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black/40"
+            className="inline-flex items-center justify-center gap-2 px-8 py-3 min-h-[44px] bg-white text-black font-semibold text-sm tracking-wider uppercase rounded-sm hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black/40"
           >
             {slide.cta}
           </button>
@@ -126,7 +126,7 @@ export default function HeroSection() {
       {/* Previous arrow */}
       <button
         onClick={goPrev}
-        className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/30 text-white hover:bg-black/50 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+        className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/30 text-white hover:bg-black/50 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
         aria-label="Slide anterior"
       >
         <ChevronLeft className="w-6 h-6" />
@@ -135,7 +135,7 @@ export default function HeroSection() {
       {/* Next arrow */}
       <button
         onClick={goNext}
-        className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/30 text-white hover:bg-black/50 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+        className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/30 text-white hover:bg-black/50 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
         aria-label="Próximo slide"
       >
         <ChevronRight className="w-6 h-6" />
@@ -154,12 +154,16 @@ export default function HeroSection() {
             role="tab"
             aria-selected={index === currentSlide}
             aria-label={`Ir para slide ${index + 1}`}
-            className={`h-2.5 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${
-              index === currentSlide
-                ? 'w-8 bg-[#ea6663]'
-                : 'w-2.5 bg-white/50 hover:bg-white/80'
-            }`}
-          />
+            className="flex items-center justify-center min-h-[44px] min-w-[44px] rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+          >
+            <span
+              className={`h-2.5 rounded-full transition-all duration-300 ${
+                index === currentSlide
+                  ? 'w-8 bg-[#ea6663]'
+                  : 'w-2.5 bg-white/50 hover:bg-white/80'
+              }`}
+            />
+          </button>
         ))}
       </div>
     </section>

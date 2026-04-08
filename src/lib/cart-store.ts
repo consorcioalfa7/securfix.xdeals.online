@@ -11,6 +11,21 @@ export interface CartItem {
   image: string;
 }
 
+// ─── Shipping Logic ─────────────────────────────────────────────────────────
+// Free shipping above €100, otherwise €9.90
+const FREE_SHIPPING_THRESHOLD = 100;
+const SHIPPING_COST_BELOW = 9.90;
+
+export function getShippingCost(subtotal: number): number {
+  if (subtotal >= FREE_SHIPPING_THRESHOLD) return 0;
+  return SHIPPING_COST_BELOW;
+}
+
+export function getMissingForFreeShipping(subtotal: number): number {
+  if (subtotal >= FREE_SHIPPING_THRESHOLD) return 0;
+  return Math.round((FREE_SHIPPING_THRESHOLD - subtotal) * 100) / 100;
+}
+
 interface CartState {
   items: CartItem[];
   isOpen: boolean;
@@ -23,6 +38,8 @@ interface CartState {
   toggleCart: () => void;
   totalItems: () => number;
   totalPrice: () => number;
+  shippingCost: () => number;
+  grandTotal: () => number;
 }
 
 export const useCartStore = create<CartState>()(
@@ -72,6 +89,16 @@ export const useCartStore = create<CartState>()(
 
       totalPrice: () => {
         return get().items.reduce((sum, i) => sum + i.salePrice * i.quantity, 0);
+      },
+
+      shippingCost: () => {
+        return getShippingCost(get().totalPrice());
+      },
+
+      grandTotal: () => {
+        const subtotal = get().totalPrice();
+        const shipping = getShippingCost(subtotal);
+        return Math.round((subtotal + shipping) * 100) / 100;
       },
     }),
     {

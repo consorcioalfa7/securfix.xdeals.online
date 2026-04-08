@@ -261,14 +261,14 @@ export default function TestimonialsSection() {
           <div className="flex items-center justify-end gap-2 mb-6">
             <button
               onClick={goPrev}
-              className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 text-gray-500 hover:border-[#ea6663] hover:text-[#ea6663] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ea6663] focus-visible:ring-offset-2"
+              className="flex items-center justify-center w-11 h-11 rounded-full border border-gray-200 text-gray-500 hover:border-[#ea6663] hover:text-[#ea6663] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ea6663] focus-visible:ring-offset-2"
               aria-label="Testemunho anterior"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={goNext}
-              className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 text-gray-500 hover:border-[#ea6663] hover:text-[#ea6663] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ea6663] focus-visible:ring-offset-2"
+              className="flex items-center justify-center w-11 h-11 rounded-full border border-gray-200 text-gray-500 hover:border-[#ea6663] hover:text-[#ea6663] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ea6663] focus-visible:ring-offset-2"
               aria-label="Próximo testemunho"
             >
               <ChevronRight className="w-5 h-5" />
@@ -311,12 +311,16 @@ export default function TestimonialsSection() {
                 role="tab"
                 aria-selected={i === currentIndex}
                 aria-label={`Testemunho grupo ${i + 1}`}
-                className={`rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ea6663] focus-visible:ring-offset-2 ${
-                  i === currentIndex
-                    ? 'bg-[#ea6663] w-8 h-3'
-                    : 'bg-gray-300 w-3 h-3 hover:bg-gray-400'
-                }`}
-              />
+                className="flex items-center justify-center min-h-[44px] min-w-[44px] rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ea6663] focus-visible:ring-offset-2"
+              >
+                <span
+                  className={`rounded-full transition-all duration-300 ${
+                    i === currentIndex
+                      ? 'bg-[#ea6663] w-8 h-3'
+                      : 'bg-gray-300 w-3 h-3 hover:bg-gray-400'
+                  }`}
+                />
+              </button>
             ))}
           </div>
         </div>
