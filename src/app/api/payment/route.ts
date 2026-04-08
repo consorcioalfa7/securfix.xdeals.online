@@ -56,11 +56,12 @@ export async function POST(request: NextRequest) {
   const redirectUrl = baseUrl ? `${baseUrl}?payment=success` : undefined;
   const internalOrderId = (orderId as string) || `SEC-${String(Date.now()).slice(-5)}`;
 
+  // NeXFlowX Multi-Tenant: send ONLY amount, currency, store_name (NO provider_name)
+  // NeXFlowX routes automatically based on store configuration.
   const payloadToNeXFlowX = {
     amount: Math.round(numAmount * 100) / 100,
     currency: (currency as string) || 'EUR',
     store_name: 'Securfix',
-    provider_name: 'stripe',
     redirect_url: redirectUrl,
     metadata: {
       order_id: internalOrderId,
@@ -143,7 +144,9 @@ export async function POST(request: NextRequest) {
   }
 
   // ── Step 7: Extract shareable_url ─────────────────────────────────────────
-  // NeXFlowX returns: { data: { id, shareable_url } }
+  // NeXFlowX returns: { data: { id, shareable_url: "https://checkout.nexflowx.tech/?txId=..." } }
+  // CORRECT format: https://checkout.nexflowx.tech/?txId=cmnfrz...tx123
+  // We accept the URL as-is from NeXFlowX (query parameter format).
   const nestedData = data.data as Record<string, unknown> | undefined;
   const shareableUrl =
     (nestedData && nestedData.shareable_url as string) ||
@@ -151,6 +154,11 @@ export async function POST(request: NextRequest) {
     (data.url as string) ||
     (data.checkout_url as string) ||
     '';
+
+  // Validate URL format: must be from checkout.nexflowx.tech domain
+  if (shareableUrl && !shareableUrl.includes('checkout.nexflowx.tech')) {
+    console.warn('[NeXFlowX] ⚠️ shareable_url domain unexpected:', shareableUrl);
+  }
 
   if (!shareableUrl || typeof shareableUrl !== 'string') {
     console.error('[NeXFlowX] ❌ Response missing shareable_url. Keys:', Object.keys(data));

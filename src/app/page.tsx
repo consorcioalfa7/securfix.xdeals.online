@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useI18n, I18nProvider } from '@/lib/i18n-context';
 import { useCartStore } from '@/lib/cart-store';
 import Header from '@/components/Header';
@@ -36,20 +36,42 @@ function AppContent() {
     // Cart will be cleared on payment success (via webhook or redirect param)
   }, []);
 
-  // ── Handle payment=success query param on page load ────────────────────────
+  // ── Handle payment success (2 channels) ─────────────────────────────────
+  // Channel 1: Redirect query param (?payment=success)
+  // Channel 2: postMessage from checkout.nexflowx.tech iframe/redirect
+
   useState(() => {
     if (typeof window === 'undefined') return;
     const params = new URLSearchParams(window.location.search);
     if (params.get('payment') === 'success') {
-      // Payment was successful — clear cart and show tracking
       clearCart();
       const txId = params.get('tx') || '';
       if (txId) setLastOrderId(txId);
       setTrackingOpen(true);
-      // Clean URL
       window.history.replaceState({}, '', window.location.pathname);
     }
   });
+
+  // Channel 2: NeXFlowX postMessage listener (strict origin check)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleMessage = (event: MessageEvent) => {
+      // CORRECT: Strict validation — only accept from checkout.nexflowx.tech
+      if (event.origin !== 'https://checkout.nexflowx.tech') return;
+
+      if (event.data && event.data.status === 'success') {
+        console.log('Pagamento efetuado. ID da Transação:', event.data.txId);
+        clearCart();
+        const txId = event.data.txId || '';
+        if (txId) setLastOrderId(txId);
+        setTrackingOpen(true);
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [clearCart]);
 
   const handleOpenFooterPage = useCallback((pageKey: string, title: string) => {
     setFooterPageKey(pageKey);
