@@ -3,6 +3,10 @@
 
 export type OrderStatus = 'preparation' | 'ready' | 'transit' | 'distribution' | 'delivered';
 
+// Payment status is tracked INDEPENDENTLY from fulfillment status.
+// An order can be `paid` (payment confirmed) while still `preparation` (fulfillment).
+export type PaymentStatus = 'pending' | 'paid' | 'failed';
+
 export interface OrderEvent {
   status: OrderStatus;
   timestamp: string;
@@ -16,6 +20,9 @@ export interface Order {
   currency: string;
   items: { name: string; quantity: number; price: number }[];
   status: OrderStatus;
+  paymentStatus: PaymentStatus;
+  paymentMethod?: 'xpayments' | 'nexflowx';
+  paidAt?: string;
   events: OrderEvent[];
   createdAt: string;
   customerEmail?: string;
@@ -27,15 +34,19 @@ export interface Order {
 const orders = new Map<string, Order>();
 
 export function createOrder(params: {
+  id?: string;
   txId: string;
   amount: number;
   currency: string;
   items: { name: string; quantity: number; price: number }[];
   customerEmail?: string;
+  paymentMethod?: 'xpayments' | 'nexflowx';
 }): Order {
-  const id = `SF-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 99999)).padStart(5, '0')}`;
+  // Use the caller-provided id (e.g. SEC-2026-12345) when available so webhooks
+  // can locate the order by the orderId sent to the payment provider.
+  const id = params.id || `SF-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 99999)).padStart(5, '0')}`;
   const now = new Date().toISOString();
-  
+
   const order: Order = {
     id,
     txId: params.txId,
@@ -43,6 +54,8 @@ export function createOrder(params: {
     currency: params.currency,
     items: params.items,
     status: 'preparation',
+    paymentStatus: 'pending',
+    paymentMethod: params.paymentMethod,
     events: [
       { status: 'preparation', timestamp: now, description: 'Order received and being prepared' },
     ],
@@ -52,10 +65,10 @@ export function createOrder(params: {
   };
 
   orders.set(id, order);
-  
+
   // Simulate order progression over time
   simulateOrderProgression(id);
-  
+
   return order;
 }
 
@@ -86,7 +99,36 @@ export function updateOrderStatus(orderId: string, status: OrderStatus, descript
     timestamp: new Date().toISOString(),
     description,
   });
-  
+
+  return order;
+}
+
+// ── Mark an order as PAID (called by payment webhooks) ──────────────────────
+// Idempotent: re-marking an already-paid order is a no-op (prevents double
+// processing of duplicate/replayed webhooks).
+export function markOrderPaid(
+  orderId: string,
+  details: { txId?: string; paymentMethod?: 'xpayments' | 'nexflowx'; amount?: number; currency?: string },
+): Order | undefined {
+  const order = orders.get(orderId);
+  if (!order) return undefined;
+
+  if (order.paymentStatus === 'paid') {
+    // Idempotent — already confirmed
+    return order;
+  }
+
+  order.paymentStatus = 'paid';
+  order.paidAt = new Date().toISOString();
+  if (details.paymentMethod) order.paymentMethod = details.paymentMethod;
+  if (details.txId) order.txId = details.txId;
+  order.events.push({
+    status: order.status,
+    timestamp: order.paidAt,
+    description: `Payment confirmed via ${details.paymentMethod || 'gateway'} (tx: ${details.txId || order.txId})`,
+  });
+
+  console.log(`[orders-store] Order ${orderId} marked as PAID (tx: ${order.txId})`);
   return order;
 }
 

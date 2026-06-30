@@ -15,6 +15,7 @@ import BlogSection from '@/components/BlogSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
+import XPaymentsModal from '@/components/XPaymentsModal';
 import OrderTrackingModal from '@/components/OrderTrackingModal';
 import FooterPageModal from '@/components/FooterPageModal';
 import ChatWidget from '@/components/ChatWidget';
@@ -29,11 +30,40 @@ function AppContent() {
   const [footerPageTitle, setFooterPageTitle] = useState('');
   const [lastOrderId, setLastOrderId] = useState<string | null>(null);
 
-  // ── When Express Checkout starts, save order ID & clear cart ───────────────
+  // ── XPayments seamless checkout modal state ────────────────────────────────
+  const [xpaymentsUrl, setXpaymentsUrl] = useState<string | null>(null);
+  const [xpaymentsOrderId, setXpaymentsOrderId] = useState<string | null>(null);
+
+  // ── When Express Checkout starts, save order ID ────────────────────────────
   const handlePaymentRedirect = useCallback((orderId: string) => {
     setLastOrderId(orderId);
     // Don't clear cart yet — user might come back if payment fails
-    // Cart will be cleared on payment success (via webhook or redirect param)
+    // Cart will be cleared on payment success (postMessage or webhook)
+  }, []);
+
+  // ── XPayments: open the checkout URL in the seamless iframe modal ──────────
+  const handleCheckoutReady = useCallback((url: string, orderId: string) => {
+    setXpaymentsUrl(url);
+    setXpaymentsOrderId(orderId);
+  }, []);
+
+  // ── XPayments: iframe signalled XPAYMENTS_PAYMENT_SUCCESS ──────────────────
+  const handleXpaymentsSuccess = useCallback(
+    (orderId: string) => {
+      console.log('[XPayments] Payment success for order:', orderId);
+      clearCart();
+      setLastOrderId(orderId);
+      setXpaymentsUrl(null);
+      setXpaymentsOrderId(null);
+      setTrackingOpen(true);
+    },
+    [clearCart],
+  );
+
+  // ── XPayments: user closed the modal without a success signal ──────────────
+  const handleXpaymentsClose = useCallback(() => {
+    setXpaymentsUrl(null);
+    setXpaymentsOrderId(null);
   }, []);
 
   // ── Handle payment success (2 channels) ─────────────────────────────────
@@ -99,7 +129,16 @@ function AppContent() {
       <Footer onOpenPage={handleOpenFooterPage} />
 
       {/* ── Overlays ── */}
-      <CartDrawer onPaymentRedirect={handlePaymentRedirect} />
+      <CartDrawer
+        onPaymentRedirect={handlePaymentRedirect}
+        onCheckoutReady={handleCheckoutReady}
+      />
+      <XPaymentsModal
+        checkoutUrl={xpaymentsUrl}
+        orderId={xpaymentsOrderId}
+        onSuccess={handleXpaymentsSuccess}
+        onClose={handleXpaymentsClose}
+      />
       <OrderTrackingModal
         isOpen={trackingOpen}
         onClose={() => setTrackingOpen(false)}

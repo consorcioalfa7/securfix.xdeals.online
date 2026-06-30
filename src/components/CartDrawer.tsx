@@ -9,13 +9,18 @@ import { useState, useRef, useCallback } from 'react';
 
 interface CartDrawerProps {
   onPaymentRedirect?: (orderId: string) => void;
+  /**
+   * XPayments seamless flow: called when the checkout session URL is ready.
+   * The parent opens the XPaymentsModal (iframe overlay) instead of redirecting.
+   */
+  onCheckoutReady?: (checkoutUrl: string, orderId: string) => void;
 }
 
 function generateOrderId(): string {
   return `SEC-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 99999)).padStart(5, '0')}`;
 }
 
-export default function CartDrawer({ onPaymentRedirect }: CartDrawerProps) {
+export default function CartDrawer({ onPaymentRedirect, onCheckoutReady }: CartDrawerProps) {
   const { items, isOpen, closeCart, removeItem, updateQuantity, totalItems, totalPrice, shippingCost, grandTotal } = useCartStore();
   const { t, formatCurrency } = useI18n();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -29,7 +34,8 @@ export default function CartDrawer({ onPaymentRedirect }: CartDrawerProps) {
   const missing = getMissingForFreeShipping(subtotal);
   const hasFreeShipping = missing === 0 && items.length > 0;
 
-  // ── Express Checkout: call API → get shareable_url → REDIRECT ─────────────
+  // ── XPayments Seamless Checkout: call API → get checkout_url → open MODAL ─
+  // The customer never leaves the site; the hosted checkout loads in an iframe.
   const handleExpressCheckout = useCallback(async () => {
     if (processingRef.current || items.length === 0) return;
     processingRef.current = true;
@@ -39,7 +45,7 @@ export default function CartDrawer({ onPaymentRedirect }: CartDrawerProps) {
     const orderId = generateOrderId();
 
     try {
-      const res = await fetch('/api/payment', {
+      const res = await fetch('/api/xpayments/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -52,23 +58,25 @@ export default function CartDrawer({ onPaymentRedirect }: CartDrawerProps) {
 
       const data = await res.json();
 
-      if (res.ok && data.shareable_url) {
-        // Notify parent so it can save the order ID
+      if (res.ok && data.checkout_url) {
+        // Notify parent so it can save the order id (for tracking later)
         onPaymentRedirect?.(orderId);
 
-        // REDIRECT user to NeXFlowX secure checkout
-        window.location.href = data.shareable_url;
+        // Hand the URL to the parent → opens XPaymentsModal (iframe overlay).
+        onCheckoutReady?.(data.checkout_url, orderId);
+
+        // Close the cart drawer so the modal is the focus.
+        closeCart();
       } else {
         setErrorMsg(data.error || t('checkout.error'));
-        processingRef.current = false;
-        setIsProcessing(false);
       }
     } catch {
       setErrorMsg(t('general.error'));
+    } finally {
       processingRef.current = false;
       setIsProcessing(false);
     }
-  }, [items, total, t, onPaymentRedirect]);
+  }, [items, total, t, onPaymentRedirect, onCheckoutReady, closeCart]);
 
   if (!isOpen) return null;
 
@@ -291,7 +299,7 @@ export default function CartDrawer({ onPaymentRedirect }: CartDrawerProps) {
                   )}
                 </button>
                 <p className="mt-2 text-center text-[10px] sm:text-xs text-gray-400">
-                  Pagamento seguro processado por NeXFlowX
+                  Pagamento seguro processado por XPayments
                 </p>
               </div>
             </div>
