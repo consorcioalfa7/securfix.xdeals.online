@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useI18n } from '@/lib/i18n-context';
 import { FOOTER_PAYMENT_ICONS } from '@/components/PaymentIcons';
+import { LivroReclamacoesIcon } from '@/components/LivroReclamacoesIcon';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -224,11 +225,8 @@ export default function Footer({ onOpenPage }: FooterProps) {
       {/* ── Bottom Bar ── */}
       <div className="border-t border-gray-700/50 bg-[#1a1a2e] py-5 px-4 sm:py-6">
         <div className="mx-auto max-w-7xl">
-          <div className="flex flex-col items-center gap-4 md:flex-row md:justify-between">
-            <p className="text-center text-[10px] sm:text-xs leading-relaxed text-gray-500 md:text-left">
-              {t('footer.copyright')}
-            </p>
-
+          {/* Payment methods + Livro de Reclamações */}
+          <div className="flex flex-col items-center gap-4 mb-5 md:flex-row md:justify-between md:mb-5">
             {/* Payment Icons */}
             <div className="flex items-center gap-2 sm:gap-3" aria-label={t('footer.secure_payment')}>
               <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-gray-500 mr-1">
@@ -239,14 +237,31 @@ export default function Footer({ onOpenPage }: FooterProps) {
                 {FOOTER_PAYMENT_ICONS.map(({ key, Component }) => (
                   <div
                     key={key}
-                    className="flex items-center justify-center rounded-md bg-white/5 p-0.5 sm:p-1 transition-transform hover:scale-110"
+                    className="flex items-center justify-center rounded-md bg-white p-0.5 sm:p-1 shadow-sm transition-transform hover:scale-110"
                   >
-                    <Component className="h-7 w-auto sm:h-8 sm:w-auto" />
+                    <Component className="h-6 w-auto sm:h-7 sm:w-auto" />
                   </div>
                 ))}
               </div>
             </div>
+
+            {/* Livro de Reclamações Digital */}
+            <a
+              href="https://www.livroreclamacoes.pt/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center rounded-lg bg-white p-1.5 shadow-sm transition-transform hover:scale-105"
+              aria-label="Livro de Reclamações Digital — abrir portal oficial"
+              title="Livro de Reclamações Digital"
+            >
+              <LivroReclamacoesIcon className="h-10 w-auto sm:h-11" />
+            </a>
           </div>
+
+          {/* Copyright */}
+          <p className="text-center text-[10px] sm:text-xs leading-relaxed text-gray-500">
+            {t('footer.copyright')}
+          </p>
         </div>
       </div>
     </footer>
